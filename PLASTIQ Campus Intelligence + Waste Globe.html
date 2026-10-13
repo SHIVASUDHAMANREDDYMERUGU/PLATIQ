@@ -1,0 +1,1413 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>PLASTIQ Campus Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* Layout: one long campus page. Learn (concepts) -> Scan (tool) -> Campus (dashboard) -> Projects -> Ask Techi -> Books -> Pledge. Dark green first, light variant follows the viewer. */
+:root{
+  --bg:#07120f; --panel:#0d1f19; --panel2:#112a22; --text:#effff8; --muted:#9cc3b3;
+  --accent:#6cffb0; --accent-fill:#6cffb0; --on-accent:#052015;
+  --tag:#ffe66d; --on-tag:#062116; --amber:#ffe66d; --amber-soft:rgba(255,230,109,.1);
+  --line:rgba(156,255,205,.16); --shadow:0 18px 50px rgba(0,0,0,.35);
+  --glow:rgba(25,215,123,.16); --nav-bg:rgba(7,18,15,.82);
+  --well:#020806; --well-fg:#6cffb0;
+  --display:'Archivo Narrow','Arial Narrow',Arial,sans-serif;
+  --body:'IBM Plex Sans','Segoe UI',Arial,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Consolas,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#F3F8F4; --panel:#FFFFFF; --panel2:#E6F1E9; --text:#14231B; --muted:#4A6356;
+    --accent:#1B6B43; --accent-fill:#1B6B43; --on-accent:#FFFFFF;
+    --tag:#EBD96A; --on-tag:#2A2500; --amber:#7A6A1E; --amber-soft:#F1EFD6;
+    --line:rgba(23,70,45,.18); --shadow:0 12px 30px rgba(20,50,35,.10);
+    --glow:rgba(46,160,100,.14); --nav-bg:rgba(243,248,244,.88);
+    color-scheme:light;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#F3F8F4; --panel:#FFFFFF; --panel2:#E6F1E9; --text:#14231B; --muted:#4A6356;
+  --accent:#1B6B43; --accent-fill:#1B6B43; --on-accent:#FFFFFF;
+  --tag:#EBD96A; --on-tag:#2A2500; --amber:#7A6A1E; --amber-soft:#F1EFD6;
+  --line:rgba(23,70,45,.18); --shadow:0 12px 30px rgba(20,50,35,.10);
+  --glow:rgba(46,160,100,.14); --nav-bg:rgba(243,248,244,.88);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:120px}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  background-image:radial-gradient(circle at 85% 0%,var(--glow),transparent 32%),radial-gradient(circle at 5% 25%,var(--glow),transparent 26%)}
+button{font:inherit;cursor:pointer}
+a{color:var(--accent)}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:20px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#scrollProgress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:100}
+
+/* nav */
+nav.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--nav-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line);transition:box-shadow .3s}
+nav.top.scrolled{box-shadow:0 10px 30px rgba(0,0,0,.18)}
+.navin{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:64px;flex-wrap:wrap;padding-block:8px}
+.logo{font-family:var(--display);font-weight:700;letter-spacing:.14em;font-size:22px}
+.logo span{color:var(--accent)}
+.navlinks{display:flex;gap:4px;overflow-x:auto;max-width:100%;scrollbar-width:none}
+.navlinks::-webkit-scrollbar{display:none}
+.navlinks a{white-space:nowrap;color:var(--muted);text-decoration:none;font-family:var(--mono);font-size:12px;padding:8px 11px;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
+.navlinks a:hover,.navlinks a.active{color:var(--accent);border-color:var(--accent)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.3fr .7fr;gap:40px;align-items:center;padding-block:64px 48px}
+.hero>*{min-width:0}
+.eyebrow{color:var(--accent);font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.byline{display:inline-block;margin-top:12px;font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--line);padding:5px 10px}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(42px,7.4vw,84px);line-height:.96;letter-spacing:-.02em;margin:16px 0 20px;text-wrap:balance}
+h1 em{font-style:normal;color:var(--accent)}
+.lede{color:var(--muted);font-size:17px;line-height:1.65;max-width:62ch;margin:0}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.btn{position:relative;overflow:hidden;border:0;border-radius:12px;padding:12px 18px;font-weight:600;transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.primary{background:var(--accent-fill);color:var(--on-accent)}
+.secondary{background:transparent;color:var(--text);border:1px solid var(--line)}
+.ripple{position:absolute;border-radius:50%;transform:scale(0);animation:ripple .65s ease-out;background:rgba(255,255,255,.35);pointer-events:none}
+@keyframes ripple{to{transform:scale(4);opacity:0}}
+.hstats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:30px}
+.hstat{background:var(--panel);padding:13px 15px}
+.hstat .k{font-family:var(--display);font-weight:700;font-size:24px;color:var(--accent)}
+.hstat .l{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.04em}
+.orb{height:340px;border:1px solid var(--line);border-radius:32px;background:linear-gradient(145deg,var(--glow),var(--panel));box-shadow:var(--shadow);display:grid;place-items:center;position:relative;overflow:hidden}
+.orb:before{content:"";width:230px;height:230px;border-radius:50%;border:1px dashed var(--accent);opacity:.45;position:absolute}
+.bottle{font-size:120px;transform:rotate(-9deg);animation:bob 4s ease-in-out infinite;user-select:none}
+@keyframes bob{0%,100%{transform:rotate(-9deg) translateY(0)}50%{transform:rotate(-4deg) translateY(-14px)}}
+.badge{position:absolute;padding:8px 11px;border:1px solid var(--line);background:var(--nav-bg);border-radius:10px;font-size:12px;font-weight:600}
+.b1{top:24px;left:20px}.b2{right:20px;top:80px}.b3{bottom:26px;left:34px}
+
+/* sections */
+.sec{padding-block:48px}
+.sec.alt{background:var(--panel2);border-block:1px solid var(--line)}
+h2{font-family:var(--display);font-weight:600;font-size:clamp(26px,3.6vw,36px);line-height:1.1;margin:0 0 8px;text-wrap:balance}
+.sub{color:var(--muted);line-height:1.6;max-width:66ch;margin:0 0 24px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.grid>*{min-width:0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;transition:transform .25s,border-color .25s,box-shadow .25s}
+.card:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:var(--shadow)}
+.card h3{font-family:var(--display);font-weight:600;font-size:18px;margin:0 0 6px;display:flex;align-items:center;gap:10px}
+.card p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.55}
+.ic{width:34px;height:34px;flex:none;display:grid;place-items:center;border-radius:9px;background:var(--panel2);color:var(--accent)}
+.alt .ic{background:var(--panel)}
+.ic svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.hier{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:22px}
+.hier .step{font-family:var(--mono);font-size:12px;border:1px solid var(--accent);color:var(--accent);padding:6px 12px;border-radius:6px}
+.hier .arrow{color:var(--muted)}
+.loop{font-family:var(--mono);font-size:13px;color:var(--accent)}
+
+/* scanner */
+.scan{display:grid;grid-template-columns:.95fr 1.05fr;gap:18px}
+.scan>*{min-width:0}
+.camera-wrap{position:relative;min-height:310px;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:var(--well);display:grid;place-items:center}
+#camera,#photoPreview{width:100%;height:310px;object-fit:cover;background:var(--well)}
+.scan-frame{position:absolute;width:72%;height:58%;border:1px solid rgba(108,255,176,.25);border-radius:16px;pointer-events:none}
+.scan-frame span{position:absolute;width:26px;height:26px;border-color:#6cffb0;border-style:solid}
+.scan-frame span:nth-child(1){top:-2px;left:-2px;border-width:3px 0 0 3px}.scan-frame span:nth-child(2){top:-2px;right:-2px;border-width:3px 3px 0 0}.scan-frame span:nth-child(3){bottom:-2px;left:-2px;border-width:0 0 3px 3px}.scan-frame span:nth-child(4){bottom:-2px;right:-2px;border-width:0 3px 3px 0}
+.scan-line{position:absolute;left:7%;right:7%;height:2px;background:#6cffb0;box-shadow:0 0 14px #6cffb0;top:15%;animation:scanline 2.2s linear infinite;opacity:.5}
+@keyframes scanline{0%{top:15%}50%{top:82%}100%{top:15%}}
+.camera-status{position:absolute;left:12px;right:12px;bottom:12px;padding:8px 11px;border-radius:10px;background:rgba(0,0,0,.72);font-size:12px;font-weight:600;color:var(--well-fg)}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+.resin{margin-top:14px;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--panel);font-size:12.5px}
+.mini{margin:6px 4px 0 0;padding:7px 10px;border:1px solid var(--line);background:transparent;color:var(--accent);border-radius:9px;font-weight:600;font-family:var(--mono);font-size:12px}
+.mini:hover{border-color:var(--accent)}
+.result h3{font-family:var(--display);font-size:26px;margin:4px 0 8px;display:block}
+.material{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.confidence{display:inline-flex;padding:4px 9px;border-radius:99px;background:var(--panel2);color:var(--accent);font-size:11px;font-weight:600}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.stat{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:14px}
+.num{font-family:var(--display);font-weight:700;font-size:26px;color:var(--accent);font-variant-numeric:tabular-nums}
+.label{font-size:12px;color:var(--muted);margin-top:3px}
+.impact{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
+.impact div{padding:13px;background:var(--panel2);border-radius:12px}
+.impact b{display:block;color:var(--accent);font-size:19px;font-family:var(--display)}
+.impact small{color:var(--muted)}
+.note-s{font-size:11.5px;color:var(--muted);line-height:1.5}
+
+/* campus */
+.dashboard{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.dashboard>*{min-width:0}
+.statrow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.progress{height:10px;background:var(--panel2);border-radius:99px;overflow:hidden;margin:12px 0}
+.bar{height:100%;width:68%;background:var(--accent-fill);border-radius:99px;animation:barLoad 1.4s .2s cubic-bezier(.2,.8,.2,1) both}
+@keyframes barLoad{from{width:0}to{width:68%}}
+.challenge,.leader{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 0;border-bottom:1px solid var(--line)}
+.challenge:last-child,.leader:last-child{border:0}
+.challenge small{color:var(--muted)}
+.tag{font-size:11px;color:var(--on-tag);background:var(--tag);padding:5px 9px;border-radius:99px;font-weight:700;flex:none}
+.leader{display:grid;grid-template-columns:34px 1fr auto}
+.rank{font-family:var(--mono);font-weight:600;color:var(--amber)}
+.score{color:var(--accent);font-weight:700;font-variant-numeric:tabular-nums}
+.leader small{color:var(--muted)}
+
+/* chat */
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.chips button{font-family:var(--mono);font-size:11.5px;background:var(--panel);border:1px solid var(--line);color:var(--muted);padding:7px 11px;border-radius:8px}
+.chips button:hover{border-color:var(--accent);color:var(--accent)}
+.chat{background:var(--panel);border:1px solid var(--line);border-radius:16px;display:flex;flex-direction:column;height:500px;max-height:72vh;overflow:hidden}
+.chat-log{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:84%;padding:10px 13px;font-size:14px;line-height:1.5;border-radius:12px;white-space:pre-wrap;overflow-wrap:anywhere}
+.msg.user{align-self:flex-end;background:var(--accent-fill);color:var(--on-accent)}
+.msg.bot{align-self:flex-start;background:var(--panel2);color:var(--text)}
+.msg.thinking{color:var(--muted);font-style:italic}
+.chat-row{display:flex;border-top:1px solid var(--line)}
+.chat-row input{flex:1;min-width:0;border:0;background:transparent;color:var(--text);padding:14px 16px;font:inherit;font-size:14px}
+.chat-row input:focus{outline:none}
+.chat-row button{border:0;background:var(--accent-fill);color:var(--on-accent);padding:0 22px;font-weight:600}
+.chat-row button:disabled{opacity:.45;cursor:not-allowed}
+.unavail{padding:28px;text-align:center;color:var(--muted)}
+
+/* books */
+.field{width:100%;padding:13px 15px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--text);font:inherit;outline:none}
+.field:focus{border-color:var(--accent)}
+.book-count{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin:14px 0}
+.book{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+.book-title{font-family:var(--display);font-weight:600;font-size:17px}
+.book-author{font-size:12px;color:var(--muted);margin:2px 0 8px}
+.book-blurb{font-size:13px;color:var(--muted)}
+.book-cat{display:inline-block;margin-top:10px;font-family:var(--mono);font-size:10.5px;background:var(--amber-soft);color:var(--amber);padding:3px 8px;border-radius:5px}
+
+/* pledge */
+.pledge{background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:clamp(20px,4vw,34px);position:relative;overflow:hidden}
+.pledge form{display:grid;gap:12px;max-width:560px}
+.pledge .btn{justify-self:start}
+.pledge-success{display:none;margin-top:20px;padding:22px;border:1px solid var(--accent);border-radius:16px;background:var(--panel2);text-align:center;position:relative;overflow:hidden}
+.pledge-success.show{display:block;animation:pledgeIn .55s ease-out both}
+.pledge-check{width:70px;height:70px;margin:0 auto 10px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--accent);font-size:34px;color:var(--accent);animation:checkPop .7s cubic-bezier(.2,1.5,.4,1) both}
+.pledge-success h3{margin:6px 0;color:var(--accent);font-family:var(--display);font-size:22px}
+.confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.confetti i{position:absolute;top:-15px;width:7px;height:14px;border-radius:2px;background:var(--accent);animation:fall 1.8s ease-in forwards}
+@keyframes pledgeIn{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes checkPop{0%{transform:scale(.3);opacity:0}70%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+@keyframes fall{to{transform:translate3d(var(--dx),340px,0) rotate(520deg);opacity:0}}
+
+footer{padding-block:36px 64px;border-top:1px solid var(--line);color:var(--muted);font-size:12px;line-height:1.7}
+footer .own{color:var(--text);font-size:13px;margin:0 0 12px}
+.toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));right:20px;max-width:calc(100% - 40px);background:var(--accent-fill);color:var(--on-accent);padding:12px 16px;border-radius:12px;font-weight:600;box-shadow:var(--shadow);opacity:0;transform:translateY(12px);pointer-events:none;transition:opacity .25s,transform .25s;z-index:60}
+.toast.show{opacity:1;transform:none}
+
+@media(max-width:850px){
+  .hero,.dashboard,.scan{grid-template-columns:1fr}
+  .hero{padding-block:40px 32px}
+  .orb{height:260px}
+  .bottle{font-size:96px}
+  h1{letter-spacing:-.01em}
+}
+@media(max-width:480px){.statrow{grid-template-columns:1fr}.pair{grid-template-columns:1fr}.impact{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+
+/* ===== Waste globe (merged) ===== */
+:root{--ocean:#0a241c;--nodata:#1b312a;--land-stroke:#07120f;--grat:rgba(156,255,205,.07);--halo:rgba(108,255,176,.28);--shade:rgba(0,0,0,.42);--sel:#ffffff;--sel-fill:rgba(255,255,255,.22);--hover-fill:rgba(255,255,255,.12);--r0:#14503a;--r1:#1c7a55;--r2:#2bb27a;--r3:#6cffb0;--r4:#ffe66d;--s0:#6cffb0;--s1:#5ec8ff;--s2:#ffe66d;--s3:#ff9f6b;--s4:#c79bff;--s5:#ff6b8b}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){--ocean:#d3e8dc;--nodata:#e4ece7;--land-stroke:#f3f8f4;--grat:rgba(23,70,45,.10);--halo:rgba(27,107,67,.22);--shade:rgba(20,50,35,.22);--sel:#14231B;--sel-fill:rgba(20,35,27,.16);--hover-fill:rgba(20,35,27,.10);--r0:#c4e2d0;--r1:#8fc9a7;--r2:#4fa578;--r3:#1b6b43;--r4:#c9a40f;--s0:#1B6B43;--s1:#1f7fb5;--s2:#9a8210;--s3:#c4571d;--s4:#7a45c4;--s5:#c2304f}}
+:root[data-theme="light"]{--ocean:#d3e8dc;--nodata:#e4ece7;--land-stroke:#f3f8f4;--grat:rgba(23,70,45,.10);--halo:rgba(27,107,67,.22);--shade:rgba(20,50,35,.22);--sel:#14231B;--sel-fill:rgba(20,35,27,.16);--hover-fill:rgba(20,35,27,.10);--r0:#c4e2d0;--r1:#8fc9a7;--r2:#4fa578;--r3:#1b6b43;--r4:#c9a40f;--s0:#1B6B43;--s1:#1f7fb5;--s2:#9a8210;--s3:#c4571d;--s4:#7a45c4;--s5:#c2304f}
+#globeSec button{color:inherit}
+#globeSec .gnote{color:var(--muted);font-size:13px;max-width:78ch;margin:22px 0 0}
+/* metric switch */
+#globeSec .metrics{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-block:4px 14px}
+#globeSec .metrics::-webkit-scrollbar{display:none}
+#globeSec .metrics button{white-space:nowrap;border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:999px;padding:7px 14px;font-size:13.5px;transition:background .2s,color .2s,border-color .2s}
+#globeSec .metrics button:hover{color:var(--text);border-color:var(--accent)}
+#globeSec .metrics button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent);font-weight:600}
+
+/* globe */
+#globeSec .stage{position:relative;height:min(76vh,640px);min-height:340px;border:1px solid var(--line);border-radius:28px;background:linear-gradient(160deg,var(--glow),var(--panel) 70%);box-shadow:var(--shadow);overflow:hidden}
+#globeSec #gCanvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab;outline-offset:-4px}
+#globeSec #gCanvas.grabbing{cursor:grabbing}
+#globeSec #gCanvas.over{cursor:pointer}
+#globeSec .tip{position:absolute;pointer-events:none;z-index:3;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:6px 10px;font-size:13px;box-shadow:var(--shadow);white-space:nowrap;transform:translate(-50%,-130%);opacity:0;transition:opacity .12s}
+#globeSec .tip.on{opacity:1}
+#globeSec .tip b{font-weight:600}
+#globeSec .tip i{font-style:normal;color:var(--muted);margin-left:8px;font-family:var(--mono);font-size:12px}
+#globeSec .hint{position:absolute;left:16px;bottom:14px;right:80px;z-index:2;font-size:13px;color:var(--muted);pointer-events:none;transition:opacity .4s}
+#globeSec .hint.gone{opacity:0}
+#globeSec .zoom{position:absolute;right:14px;bottom:14px;z-index:2;display:flex;flex-direction:column;gap:6px}
+#globeSec .zoom button{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--panel);font-size:18px;line-height:1;display:grid;place-items:center}
+#globeSec .zoom button:hover{border-color:var(--accent);color:var(--accent)}
+#globeSec .loading{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:24px;color:var(--muted);z-index:4;background:var(--panel)}
+#globeSec .loading[hidden]{display:none}
+
+#globeSec .legend{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;margin:14px 2px 0;font-family:var(--mono);font-size:12px;color:var(--muted)}
+#globeSec .legend .lg{display:flex;align-items:center;gap:7px}
+#globeSec .legend .sw{width:14px;height:14px;border-radius:4px;border:1px solid var(--line)}
+
+/* result */
+#globeSec .result{margin-top:22px;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:var(--shadow)}
+#globeSec .result>div{background:var(--panel);padding:26px}
+#globeSec .cname{font-family:var(--display);font-weight:700;font-size:clamp(30px,4.6vw,46px);line-height:1;margin:0 0 4px;letter-spacing:-.01em}
+#globeSec .csub{color:var(--muted);font-size:14px;margin:0 0 22px}
+#globeSec .rankbox{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+#globeSec .rankn{font-family:var(--display);font-weight:700;font-size:clamp(64px,10vw,96px);line-height:.9;color:var(--accent)}
+#globeSec .rankof{color:var(--muted);font-size:15px}
+#globeSec .ranktrack{height:6px;border-radius:99px;background:var(--panel2);margin:14px 0 22px;position:relative}
+#globeSec .ranktrack i{position:absolute;top:-4px;width:14px;height:14px;border-radius:50%;background:var(--accent);transform:translateX(-50%);box-shadow:0 0 0 4px var(--glow)}
+#globeSec .kv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+#globeSec .kv div{border-top:1px solid var(--line);padding-top:10px}
+#globeSec .kv .v{font-family:var(--display);font-weight:700;font-size:26px;line-height:1.1}
+#globeSec .kv .v small{font-size:13px;font-weight:500;color:var(--muted);margin-left:3px}
+#globeSec .kv .l{font-size:12.5px;color:var(--muted);margin-top:2px}
+#globeSec .sechead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:0 0 4px}
+#globeSec .sechead h2{font-family:var(--display);font-size:24px;margin:0;font-weight:700}
+#globeSec .sechead span{font-size:12.5px;color:var(--muted)}
+#globeSec .lead{font-size:14.5px;color:var(--muted);margin:0 0 16px}
+#globeSec .lead b{color:var(--text);font-weight:600}
+#globeSec .srows{display:grid;gap:12px}
+#globeSec .srow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;align-items:baseline;padding:2px 0}
+#globeSec .srow .nm{display:flex;align-items:center;gap:8px;font-size:14px}
+#globeSec .srow .dot{width:10px;height:10px;border-radius:3px;flex:none}
+#globeSec .srow .val{font-family:var(--mono);font-size:12.5px;text-align:right;white-space:nowrap}
+#globeSec .srow .val em{font-style:normal;color:var(--muted)}
+#globeSec .srow .bar{grid-column:1/-1;height:8px;border-radius:99px;background:var(--panel2);overflow:hidden}
+#globeSec .srow .bar i{display:block;height:100%;border-radius:99px;transition:width .6s cubic-bezier(.2,.7,.2,1)}
+#globeSec .srow.act .nm{font-weight:600}
+#globeSec .empty{color:var(--muted);max-width:44ch}
+#globeSec .empty h3{font-family:var(--display);font-size:30px;margin:0 0 8px;color:var(--text)}
+
+/* ranking */
+#globeSec .ranking{margin-top:22px;border:1px solid var(--line);border-radius:24px;background:var(--panel);overflow:hidden}
+#globeSec .rhead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:20px 24px 12px;flex-wrap:wrap}
+#globeSec .rhead h2{font-family:var(--display);font-size:26px;margin:0}
+#globeSec .rhead span{font-size:13px;color:var(--muted)}
+#globeSec #gRlist{max-height:440px;overflow-y:auto;position:relative;padding:0 10px 10px;scrollbar-width:thin}
+#globeSec .row{display:grid;grid-template-columns:44px minmax(110px,190px) minmax(0,1fr) 92px;gap:10px;align-items:center;width:100%;text-align:left;border:0;background:transparent;padding:8px 14px;border-radius:12px}
+#globeSec .row:hover{background:var(--panel2)}
+#globeSec .row[aria-current="true"]{background:var(--panel2);box-shadow:inset 3px 0 0 var(--accent)}
+#globeSec .row .n{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+#globeSec .row .cn{font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#globeSec .row .bb{height:8px;border-radius:99px;background:var(--panel2);overflow:hidden}
+#globeSec .row[aria-current="true"] .bb{background:var(--bg)}
+#globeSec .row .bb i{display:block;height:100%;background:var(--accent);border-radius:99px}
+#globeSec .row .t{font-family:var(--mono);font-size:12.5px;text-align:right}
+#globeSec .gnote{color:var(--muted);font-size:13px;max-width:78ch;margin:22px 0 0}
+
+@media (max-width:820px){
+  #globeSec .result{grid-template-columns:1fr}
+  #globeSec .kv{grid-template-columns:repeat(3,minmax(0,1fr))}
+  #globeSec .row{grid-template-columns:34px minmax(90px,1fr) 78px;}
+  #globeSec .row .bb{display:none}
+  #globeSec .intro{padding-block:30px 16px}
+  #globeSec .stage{height:min(66vh,520px)}
+}
+@media (max-width:480px){
+  #globeSec .result>div{padding:20px 18px}
+  #globeSec .kv .v{font-size:22px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+</style>
+
+<svg style="display:none" aria-hidden="true">
+  <defs>
+    <symbol id="ic-leaf" viewBox="0 0 24 24"><path d="M5 19c8 1 14-5 14-14C10 5 4 11 5 19Z"/><path d="M5 19c3-4 6-7 12-11"/></symbol>
+    <symbol id="ic-chip" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="1"/><path d="M9 7V4M12 7V4M15 7V4M9 20v-3M12 20v-3M15 20v-3M7 9H4M7 12H4M7 15H4M20 9h-3M20 12h-3M20 15h-3"/></symbol>
+    <symbol id="ic-hourglass" viewBox="0 0 24 24"><path d="M6 3h12M6 21h12"/><path d="M7 3c0 5 10 5 10 0M7 21c0-5 10-5 10 0"/><path d="M9 5.3c1 2.4 5 2.4 6 0M9 18.7c1-2.4 5-2.4 6 0"/></symbol>
+    <symbol id="ic-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3.5 19c0-3.3 2.5-5.5 5.5-5.5S14.5 15.7 14.5 19"/><circle cx="17" cy="9" r="2.3"/><path d="M15.5 13.2c2.4.3 4 2.3 4 5.3"/></symbol>
+    <symbol id="ic-droplet" viewBox="0 0 24 24"><path d="M12 3c3 4 6.5 8.2 6.5 12A6.5 6.5 0 0 1 5.5 15C5.5 11.2 9 7 12 3Z"/></symbol>
+    <symbol id="ic-pulse" viewBox="0 0 24 24"><path d="M20.5 12h-3.5l-1.7-4-3 8-2-6-1.3 2H3.5"/><path d="M12 20.3C7 17.5 3.5 14.3 3.5 10.2A4.7 4.7 0 0 1 12 7.3a4.7 4.7 0 0 1 8.5 2.9c0 .6-.08 1.2-.24 1.8"/></symbol>
+    <symbol id="ic-wifi" viewBox="0 0 24 24"><path d="M3.5 9.5a13 13 0 0 1 17 0"/><path d="M6.5 13a9 9 0 0 1 11 0"/><path d="M9.5 16.4a4.7 4.7 0 0 1 5 0"/><circle cx="12" cy="19.3" r="1"/></symbol>
+    <symbol id="ic-camera" viewBox="0 0 24 24"><path d="M4 8.5h3l1.3-2h7.4l1.3 2h3v10H4Z"/><circle cx="12" cy="13.3" r="3.3"/></symbol>
+    <symbol id="ic-bars" viewBox="0 0 24 24"><path d="M5 20V11M12 20V6M19 20v-7"/><path d="M3.5 20h17"/></symbol>
+    <symbol id="ic-qr" viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6"/><rect x="14" y="4" width="6" height="6"/><rect x="4" y="14" width="6" height="6"/><path d="M14 14h3v3h-3zM20 14v3M17 20h3"/></symbol>
+    <symbol id="ic-clipboard" viewBox="0 0 24 24"><rect x="5.5" y="4.5" width="13" height="16" rx="1.5"/><rect x="9" y="3" width="6" height="3" rx="1"/><path d="M8.5 11h7M8.5 14.5h7M8.5 18h4.5"/></symbol>
+    <symbol id="ic-bottle" viewBox="0 0 24 24"><path d="M10 3h4v3.2l1.5 2.3v11a1.5 1.5 0 0 1-1.5 1.5h-4A1.5 1.5 0 0 1 8.5 19.5v-11L10 6.2Z"/><path d="M8.5 12.5h7"/></symbol>
+    <symbol id="ic-calendar" viewBox="0 0 24 24"><rect x="4" y="5.5" width="16" height="15" rx="1.5"/><path d="M4 10h16M8 3.5v4M16 3.5v4"/><path d="M8.5 14.5 11 17l4.5-5"/></symbol>
+    <symbol id="ic-sensor" viewBox="0 0 24 24"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><circle cx="12" cy="12" r="3.3"/><path d="M7 7 5.3 5.3M17 7l1.7-1.7M7 17l-1.7 1.7M17 17l1.7 1.7"/></symbol>
+  </defs>
+</svg>
+
+<div id="scrollProgress"></div>
+
+<nav class="top" id="topnav">
+  <div class="wrap navin">
+    <div class="logo">PLASTI<span>Q</span></div>
+    <div class="navlinks">
+      <a href="#globe">Globe</a><a href="#learn">Learn</a><a href="#scan">Scan</a><a href="#campus">Campus</a><a href="#projects">Projects</a><a href="#assistant">Ask Techi</a><a href="#books">Books</a><a href="#pledge">Pledge</a>
+    </div>
+  </div>
+</nav>
+
+<header class="wrap hero">
+  <div>
+    <div class="eyebrow">Environmental studies × technology</div>
+    <h1>Make plastic <em>visible.</em> Make change measurable.</h1>
+    <p class="lede">Human and plastic waste awareness for tech students. Waste is a natural result of human activity, but its volume has grown fast with urbanisation, convenience culture and consumer lifestyles. PLASTIQ turns that awareness into data, challenges and collective action on campus.</p>
+    <span class="byline">CREATED BY MERUGU SHIVA SUDHAMAN REDDY</span>
+    <div class="cta">
+      <button class="btn primary" data-go="scan">Scan my plastic →</button>
+      <button class="btn secondary" data-go="campus">See campus impact</button>
+      <button class="btn secondary" data-go="globe">Explore the waste globe</button>
+    </div>
+    <div class="hstats">
+      <div class="hstat"><div class="k">5</div><div class="l">CATEGORIES OF WASTE</div></div>
+      <div class="hstat"><div class="k">5R</div><div class="l">REFUSE → RECYCLE</div></div>
+      <div class="hstat"><div class="k">8</div><div class="l">PROJECT IDEAS</div></div>
+      <div class="hstat"><div class="k">5</div><div class="l">PHASE REDUCTION PLAN</div></div>
+    </div>
+  </div>
+  <div class="orb"><div class="badge b1">♻ Circular mindset</div><div class="badge b2">+20 Eco Points</div><div class="badge b3">Campus challenge active</div><div class="bottle">🧴</div></div>
+</header>
+
+<section class="sec alt" id="globe">
+  <div class="wrap" id="globeSec">
+    <h2>Where the world's waste comes from</h2>
+    <p class="sub">Drag to turn the globe. Tap any country to see how much waste it produces each year, where it ranks, and which sectors are behind it. Then scroll on to see what you can do about it on campus.</p>
+    <div class="metrics" id="gMetrics" role="group" aria-label="Colour the globe by"></div>
+    <div class="stage" id="gStage">
+      <canvas id="gCanvas" tabindex="0" aria-label="Interactive globe. Drag to rotate, tap a country for its waste figures. Arrow keys rotate, plus and minus zoom."></canvas>
+      <div class="tip" id="gTip"></div>
+      <div class="hint" id="gHint">Drag to rotate. Tap a country. Pinch or use the buttons to zoom.</div>
+      <div class="zoom"><button id="gZin" aria-label="Zoom in">+</button><button id="gZout" aria-label="Zoom out">&minus;</button></div>
+      <div class="loading" id="gLoading">Loading the map&hellip;</div>
+    </div>
+    <div class="legend" id="gLegend"></div>
+    <section class="result" id="gResult" aria-live="polite"></section>
+    <section class="ranking">
+      <div class="rhead"><h2 id="gRtitle">Ranking by total waste</h2><span id="gRcount"></span></div>
+      <div id="gRlist" role="list"></div>
+    </section>
+    <p class="gnote">These are indicative estimates for comparing countries, not an audit. Household and commercial waste is based on World Bank <i>What a Waste 2.0</i> figures (roughly 2016&ndash;2018). Totals and the split into industry, construction, agriculture and hazardous waste are modelled from each country's income level and economy, because most countries do not report every sector. Amounts are million tonnes a year (Mt).</p>
+  </div>
+</section>
+
+<section class="sec" id="learn">
+  <div class="wrap">
+    <h2>Understanding the problem</h2>
+    <p class="sub">Waste awareness starts with knowing where waste comes from, what harm it can cause, and what practical action reduces that harm.</p>
+    <div class="grid">
+      <div class="card"><h3><span class="ic"><svg><use href="#ic-leaf"/></svg></span>What counts as waste</h3><p>Biodegradable/organic, recyclable, residual, e-waste, and sanitary or hazardous material. Each needs different handling, which is why segregation at the source matters.</p></div>
+      <div class="card"><h3><span class="ic"><svg><use href="#ic-hourglass"/></svg></span>Why plastic persists</h3><p>Plastic is cheap, light and durable, but much of it is used for minutes and discarded. It doesn't biodegrade like organic matter; it fragments into microplastics instead.</p></div>
+      <div class="card"><h3><span class="ic"><svg><use href="#ic-users"/></svg></span>Human behaviour drives it</h3><p>Buying habits, convenience culture, and disposal practices shape the waste stream as much as the materials themselves, on a campus as much as anywhere.</p></div>
+      <div class="card"><h3><span class="ic"><svg><use href="#ic-droplet"/></svg></span>Environmental impact</h3><p>Poorly managed plastic waste moves from streets and drains into rivers and oceans, fragmenting into microplastics and affecting wildlife along the way.</p></div>
+      <div class="card"><h3><span class="ic"><svg><use href="#ic-pulse"/></svg></span>Health concerns</h3><p>Unsafe handling, open burning, and waste near food or water sources create real but manageable risks. The fix is safe segregation and proper collection, not panic.</p></div>
+      <div class="card"><h3><span class="ic"><svg><use href="#ic-chip"/></svg></span>E-waste specifically</h3><p>Old phones, chargers and laptops shouldn't go in ordinary waste. Wipe personal data first, then use an authorised e-waste collection channel.</p></div>
+    </div>
+    <div class="hier">
+      <div class="step">Refuse</div><div class="arrow">→</div><div class="step">Reduce</div><div class="arrow">→</div><div class="step">Reuse</div><div class="arrow">→</div><div class="step">Repair</div><div class="arrow">→</div><div class="step">Recycle</div>
+    </div>
+  </div>
+</section>
+
+<section class="sec alt" id="tech">
+  <div class="wrap">
+    <h2>Where tech students fit in</h2>
+    <p class="sub">A smart system is only useful if it solves a real operational problem. Observe how waste is generated and collected before choosing a technology.</p>
+    <div class="grid">
+      <div class="card"><h3><span class="ic"><svg><use href="#ic-wifi"/></svg></span>IoT smart bins</h3><p>Fill-level sensors report bin status to a dashboard so collection routes get planned by data instead of guesswork.</p></div>
+      <div class="card"><h3><span class="ic"><svg><use href="#ic-camera"/></svg></span>AI-assisted sorting</h3><p>Computer vision can classify paper, plastic, metal or organic waste, as an aid alongside human oversight, not a replacement for it.</p></div>
+      <div class="card"><h3><span class="ic"><svg><use href="#ic-bars"/></svg></span>Data &amp; dashboards</h3><p>Anonymous surveys and waste counts turn an awareness campaign into something measurable, before and after.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="why">
+  <div class="wrap">
+    <h2>The problem, turned into a product</h2>
+    <p class="sub">Awareness alone is easy to forget. PLASTIQ creates a feedback loop: <span class="loop">observe → understand → act → measure → share</span></p>
+    <div class="grid">
+      <div class="card"><h3><span class="ic"><svg><use href="#ic-bars"/></svg></span>See the hidden cost</h3><p>Log an item and receive a simple impact explanation instead of an abstract environmental warning.</p></div>
+      <div class="card"><h3><span class="ic"><svg><use href="#ic-users"/></svg></span>Compete for good</h3><p>Eco points, streaks and team challenges turn responsible behaviour into a campus-wide game.</p></div>
+      <div class="card"><h3><span class="ic"><svg><use href="#ic-wifi"/></svg></span>Turn students into amplifiers</h3><p>Every challenge produces a shareable result, helping the product spread beyond one classroom.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec alt" id="scan">
+  <div class="wrap">
+    <h2>Real Plastic Impact Scanner</h2>
+    <p class="sub">Point your camera at one plastic item, or upload a photo of it. PLASTIQ estimates the object's shape and relative size, reads a barcode if one is visible, and matches the result against EPA resin-identification references. Polymer chemistry is only stated when evidence supports it.</p>
+    <div class="scan">
+      <div>
+        <div class="camera-wrap">
+          <video id="camera" autoplay playsinline muted></video>
+          <img id="photoPreview" alt="Uploaded photo of the item being scanned" hidden>
+          <canvas id="capture" hidden></canvas>
+          <div class="scan-frame"><span></span><span></span><span></span><span></span><div class="scan-line"></div></div>
+          <div class="camera-status" id="cameraStatus">Press Start camera, or upload a photo</div>
+        </div>
+        <div class="actions">
+          <button class="btn primary" id="cameraBtn">Start camera</button>
+          <button class="btn secondary" id="scanBtn">Scan item</button>
+          <button class="btn secondary" id="uploadBtn">Upload photo</button>
+          <button class="btn secondary" id="captureBtn">Capture only</button>
+          <button class="btn secondary" id="demoBtn">Demo scan</button>
+          <button class="btn secondary" id="resetBtn">Reset</button>
+        </div>
+        <input type="file" id="photoInput" accept="image/*" capture="environment" hidden>
+        <p class="note-s" style="margin-top:12px"><b>How a scan works:</b> a fresh frame is captured, checked for a barcode, then classified by visible geometry. If the camera is blocked in your browser view, use Upload photo.</p>
+        <div class="resin"><b>See resin data instantly</b><br>
+          <button class="mini" data-resin="01">♳ PET</button><button class="mini" data-resin="02">♴ HDPE</button><button class="mini" data-resin="03">♵ PVC</button><button class="mini" data-resin="04">♶ LDPE</button><button class="mini" data-resin="05">♷ PP</button><button class="mini" data-resin="06">♸ PS</button><button class="mini" data-resin="07">♹ OTHER</button>
+        </div>
+      </div>
+      <div class="card result" id="resultCard" style="display:none">
+        <div class="eyebrow">Scan result</div><h3 id="itemName">Scan result</h3>
+        <div class="material"><span id="material">Not confirmed</span><span class="confidence" id="confidence">Not analyzed</span></div>
+        <div class="pair">
+          <div class="stat"><div class="num" id="visualShape">Bottle</div><div class="label">Detected shape</div></div>
+          <div class="stat"><div class="num" id="visualSize">Medium</div><div class="label">Relative size</div></div>
+        </div>
+        <p class="note-s" id="matchReason" style="font-size:13px"></p>
+        <p class="note-s" id="sourceLine"></p>
+        <p class="sub" id="itemText" style="margin:10px 0 0;font-size:14px"></p>
+        <div class="impact"><div><b id="points">+20</b><small>Eco Points</small></div><div><b id="action">REUSE</b><small>Recommended action</small></div><div><b>♻</b><small>Segregate correctly</small></div><div><b>7-day</b><small>Personal challenge</small></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="campus">
+  <div class="wrap">
+    <h2>Campus Command Center</h2>
+    <p class="sub">A dashboard the college can use to turn individual actions into measurable collective progress. The figures below are illustrative sample data.</p>
+    <div class="dashboard">
+      <div class="card" style="transform:none">
+        <div class="statrow">
+          <div class="stat"><div class="num" id="bottles">1,284</div><div class="label">items avoided</div></div>
+          <div class="stat"><div class="num" id="kg">412 kg</div><div class="label">plastic diverted</div></div>
+          <div class="stat"><div class="num">2.7k</div><div class="label">eco actions</div></div>
+        </div>
+        <h3 style="margin-top:26px">Campus reduction goal</h3>
+        <div class="progress"><div class="bar"></div></div>
+        <div class="note-s">68% of this semester's target</div>
+      </div>
+      <div class="card" style="transform:none">
+        <h3>Live challenges</h3>
+        <div class="challenge"><span><b>Refill Week</b><br><small>Avoid 3 disposable bottles</small></span><span class="tag">+100</span></div>
+        <div class="challenge"><span><b>Clean-Code, Clean-Campus</b><br><small>Team up with 3 tech friends</small></span><span class="tag">+150</span></div>
+        <div class="challenge"><span><b>Plastic Audit Sprint</b><br><small>Map 5 campus hotspots</small></span><span class="tag">+200</span></div>
+      </div>
+    </div>
+    <h2 style="margin-top:44px">Eco League</h2>
+    <p class="sub">Social pressure is redirected into positive competition. Teams shown are sample entries.</p>
+    <div class="card" style="transform:none">
+      <div class="leader"><div class="rank">01</div><div><b>Green Coders</b><br><small>86 actions</small></div><div class="score">2,480</div></div>
+      <div class="leader"><div class="rank">02</div><div><b>Tech Titans</b><br><small>74 actions</small></div><div class="score">2,130</div></div>
+      <div class="leader"><div class="rank">03</div><div><b>ByteBack</b><br><small>69 actions</small></div><div class="score">1,960</div></div>
+      <div class="leader"><div class="rank">04</div><div><b>Your Team</b><br><small>Add your first action today</small></div><div class="score">0</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec alt" id="projects">
+  <div class="wrap">
+    <h2>Experiments &amp; projects</h2>
+    <p class="sub">Buildable ideas, ordered roughly from lightest to most involved. Each one can stand alone or feed into the "Smart Campus Waste Awareness and Monitoring System" as one working piece.</p>
+    <div class="grid">
+      <div class="card"><h3><span class="ic"><svg><use href="#ic-bars"/></svg></span>Sensor simulation (no hardware)</h3><p>Simulate bin fill-levels in a spreadsheet or small script and drive a dashboard from it. The whole system's logic, provable before you touch a single sensor.</p></div>
+      <div class="card"><h3><span class="ic"><svg><use href="#ic-qr"/></svg></span>QR code sorting guide</h3><p>A QR code on each bin links to a one-page guide for what goes where.</p></div>
+      <div class="card"><h3><span class="ic"><svg><use href="#ic-clipboard"/></svg></span>Anonymous waste survey</h3><p>Run the sample questions from the brief, present results as a couple of charts, and write a one-paragraph interpretation of the biggest awareness gap.</p></div>
+      <div class="card"><h3><span class="ic"><svg><use href="#ic-bottle"/></svg></span>Refill-station bottle tracker</h3><p>A simple counter or form logging bottles refilled instead of bought, the kind of small, visible metric that makes a campaign feel real.</p></div>
+      <div class="card"><h3><span class="ic"><svg><use href="#ic-sensor"/></svg></span>IoT fill-level sensor</h3><p>A microcontroller and an ultrasonic or IR sensor estimate how full a bin is and push the reading to a small server or dashboard.</p></div>
+      <div class="card"><h3><span class="ic"><svg><use href="#ic-camera"/></svg></span>Computer-vision waste sorter</h3><p>Train a small image classifier on a labelled set of common campus waste items, photographed as they actually appear: dirty, crushed, partly hidden.</p></div>
+      <div class="card"><h3><span class="ic"><svg><use href="#ic-chip"/></svg></span>E-waste collection drive</h3><p>Plan and run a one-day authorised e-waste drop-off: intake form, a simple log of what came in, and a short report on volume collected.</p></div>
+      <div class="card"><h3><span class="ic"><svg><use href="#ic-calendar"/></svg></span>Before/after reduction study</h3><p>Follow the five-phase plan from the brief (observe, measure, act, add technology, evaluate) and report whether the intervention actually changed behaviour.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="assistant">
+  <div class="wrap">
+    <h2>Ask Techi</h2>
+    <p class="sub">Your built-in assistant for this topic. Ask about plastic waste, e-waste, IoT sensors, the 5Rs, campaign ideas, or a related topic entirely.</p>
+    <div class="chips" id="chips">
+      <button data-q="Explain the waste hierarchy with a campus example">Waste hierarchy, with a campus example</button>
+      <button data-q="Give me 3 realistic smart-bin project ideas for a student group with no budget">Low-budget smart-bin ideas</button>
+      <button data-q="What should I actually do with a dead laptop battery?">What to do with a dead battery</button>
+    </div>
+    <div class="chat" id="chatShell">
+      <div class="chat-log" id="chatLog"></div>
+      <div class="chat-row">
+        <input type="text" id="chatInput" placeholder="Ask about waste, plastic, e-waste, or anything else…" disabled>
+        <button id="chatSend" disabled>Send</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec alt" id="books">
+  <div class="wrap">
+    <h2>Further reading</h2>
+    <p class="sub">A working library on plastic, waste and sustainability. Search by title, author or topic.</p>
+    <input type="text" class="field" id="bookSearch" placeholder="Search books: try 'plastic', 'zero waste', 'e-waste', an author name…">
+    <div class="book-count" id="bookCount"></div>
+    <div class="grid" id="bookGrid"></div>
+  </div>
+</section>
+
+<section class="sec" id="pledge">
+  <div class="wrap">
+    <div class="pledge">
+      <div class="eyebrow">Social impact engine</div>
+      <h2 style="margin-top:8px">Take the 7-day plastic pledge</h2>
+      <p class="sub">Enter your name, email and one practical commitment. Your pledge is saved on this device. Thank-you emails and the seven daily messages need the PLASTIQ email backend, which runs separately from this page.</p>
+      <form id="pledgeForm">
+        <input class="field" id="name" name="name" type="text" placeholder="Your name / team name" autocomplete="name" required>
+        <input class="field" id="email" name="email" type="email" placeholder="Your email address" autocomplete="email" required>
+        <input class="field" id="goal" name="goal" type="text" placeholder="Example: I will avoid 7 disposable bottles" required>
+        <button class="btn primary" id="pledgeBtn" type="submit">Make my pledge →</button>
+      </form>
+      <div id="pledgeOut" class="pledge-success" aria-live="polite">
+        <div class="confetti" id="confetti"></div>
+        <div class="pledge-check">✓</div>
+        <h3>Pledge accepted!</h3>
+        <p class="sub" style="margin:0 auto">Your 7-day commitment has been recorded on this device.</p>
+        <div class="sub" id="pledgeDetails" style="margin:10px auto 0"></div>
+      </div>
+    </div>
+    <h2 style="margin-top:48px">Why this can scale</h2>
+    <div class="grid" style="margin-top:16px">
+      <div class="card"><h3>College-ready</h3><p>Start with one class, then connect departments, hostels, cafeterias and campus clubs.</p></div>
+      <div class="card"><h3>Data-ready</h3><p>Student actions can become anonymised campus indicators for waste reduction campaigns.</p></div>
+      <div class="card"><h3>Community-ready</h3><p>Public challenges and shareable pledges can extend the campaign from campus to families and local communities.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p class="own">Created by <strong>Merugu Shiva Sudhaman Reddy</strong>.<br>© 2026 Merugu Shiva Sudhaman Reddy, Krishankant Goutham and Nara Bharathwaj Naidu. All rights reserved. This page and its content may not be reproduced or redistributed without permission from the copyright holders.</p>
+    <b>PLASTIQ</b>: prototype for Environmental Studies CA1, "Plastic Waste Awareness for Tech Students".<br><br>
+    Evidence base: World Bank <i>What a Waste 2.0</i> (country waste figures, modelled for sector splits); U.S. EPA resin-identification guidance for plastics #1–#7; Open Food Facts packaging data/API; CPCB Annual Report 2022–23; MoEFCC Plastic Waste Management Rules; UNEP plastic-pollution resources. Product lookups run only where the page is allowed to reach Open Food Facts. Local campus acceptance rules still control disposal. Visual recognition estimates object class, shape and relative size; it does not by itself prove polymer chemistry or local recyclability. Exact material claims require a visible resin code, manufacturer/packaging record, or a validated custom plastic-classification model. Techi runs in your browser session and nothing you type is stored by this page. The book list is a curated starting point, not exhaustive; verify availability and edition before citing it.
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+
+  /* ---------- toast ---------- */
+  var toastTimer=null;
+  function toast(t){var x=$('toast');x.textContent=t;x.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(function(){x.classList.remove('show')},2600)}
+
+  /* ---------- scanner data ---------- */
+  var resinData={
+    "01":{name:"PET / PETE",full:"Polyethylene terephthalate",uses:"Beverage bottles, food jars and some clear packaging",action:"Empty/rinse and use the campus PET collection if accepted. Prefer refillable alternatives for daily use.",score:20},
+    "02":{name:"HDPE",full:"High-density polyethylene",uses:"Milk/water jugs, shampoo and cleaning bottles",action:"Empty/rinse and follow the campus HDPE collection route if available.",score:20},
+    "03":{name:"PVC",full:"Polyvinyl chloride",uses:"Some films, bottles, pipes and other products",action:"Do not assume ordinary bottle recycling accepts PVC. Verify the collection route.",score:10},
+    "04":{name:"LDPE",full:"Low-density polyethylene",uses:"Bags, wraps, films and squeeze packaging",action:"Reduce disposable film. Use a dedicated film collection route only where provided.",score:10},
+    "05":{name:"PP",full:"Polypropylene",uses:"Food tubs, caps, containers and some takeaway ware",action:"Prefer reusable PP containers. Clean the item and follow the campus acceptance rules.",score:20},
+    "06":{name:"PS",full:"Polystyrene",uses:"Foam cups, trays and some disposable food packaging",action:"Avoid disposable PS where possible. Verify whether your campus accepts it.",score:5},
+    "07":{name:"OTHER",full:"Other / mixed plastics",uses:"Mixed or less-common polymers",action:"Do not guess recyclability. Use the campus waste guide or dedicated collection route.",score:5}
+  };
+  var profiles={
+    bottle:{shape:"Tall container / bottle-like",candidates:["01","02","05"]},
+    cup:{shape:"Cup / tub-like",candidates:["05","06","01"]},
+    bag:{shape:"Flexible bag / film-like",candidates:["04","07"]},
+    flat:{shape:"Flat / wrapper-like",candidates:["04","07","05"]},
+    container:{shape:"Rigid container-like",candidates:["05","02","01"]}
+  };
+  var stream=null,busy=false,scanSeq=0,uploadedCanvas=null;
+
+  function showResult(x){
+    $('resultCard').style.display='block';
+    $('itemName').textContent=x.name||'Scan result';$('itemText').textContent=x.text||'';
+    $('material').textContent=x.material||'Not confirmed';$('confidence').textContent=x.confidence||'Not verified';
+    $('points').textContent=x.points||'+0';$('action').textContent=x.action||'VERIFY';
+    $('visualShape').textContent=x.shape||'Unknown';$('visualSize').textContent=x.size||'Unknown';
+    $('matchReason').textContent=x.matchReason||'No evidence available.';$('sourceLine').textContent=x.source||'';
+  }
+  function clearResult(){
+    $('resultCard').style.display='none';
+    ['itemName','itemText','material','confidence','points','action','visualShape','visualSize','matchReason','sourceLine'].forEach(function(id){$(id).textContent=''});
+  }
+  function showResin(code){
+    var r=resinData[code];
+    showResult({name:r.name,points:'+'+r.score,action:'REFERENCE',material:'#'+code+' — '+r.full,confidence:'Reference data, not a scan',shape:'Reference',size:'N/A',matchReason:'Resin identification code #'+code+'. Common uses: '+r.uses+'.',source:'EPA/ASTM resin-identification reference',text:r.action+' The resin code identifies the plastic resin; it does not by itself guarantee local recyclability.'});
+    toast('Resin #'+code+' reference loaded');
+  }
+  function showPreview(on){$('photoPreview').hidden=!on;$('camera').hidden=on}
+
+  async function startCamera(){
+    if(stream){stopCamera();return}
+    if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){$('cameraStatus').textContent='Camera is not available in this view. Use Upload photo.';toast('Camera unavailable');return}
+    try{
+      scanSeq++;clearResult();showPreview(false);uploadedCanvas=null;
+      $('cameraStatus').textContent='Requesting camera permission…';
+      stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false});
+      var v=$('camera');v.srcObject=stream;await v.play();
+      $('cameraBtn').textContent='Stop camera';
+      $('cameraStatus').textContent='Camera ready. Place ONE plastic item inside the frame';
+      toast('Camera started');
+    }catch(e){
+      stream=null;$('cameraBtn').textContent='Start camera';
+      var msg=e&&e.name==='NotAllowedError'?'Camera is blocked here. Use Upload photo, or open the page directly in your browser.':e&&e.name==='NotFoundError'?'No camera was found. Use Upload photo.':'Camera could not start. Use Upload photo.';
+      $('cameraStatus').textContent=msg;toast(msg);
+    }
+  }
+  function stopCamera(){
+    if(stream)stream.getTracks().forEach(function(t){t.stop()});
+    stream=null;$('camera').srcObject=null;$('cameraBtn').textContent='Start camera';$('cameraStatus').textContent='Camera stopped';
+  }
+
+  function grab(source,w,h){
+    var s=Math.min(1,1280/w),c=$('capture');
+    c.width=Math.round(w*s);c.height=Math.round(h*s);
+    c.getContext('2d',{willReadFrequently:true}).drawImage(source,0,0,c.width,c.height);
+    return c;
+  }
+  function analyzeCanvas(src){
+    var c=document.createElement('canvas'),scale=Math.min(900/src.width,1);
+    c.width=Math.max(360,Math.round(src.width*scale));c.height=Math.max(270,Math.round(src.height*scale));
+    var ctx=c.getContext('2d',{willReadFrequently:true});ctx.drawImage(src,0,0,c.width,c.height);
+    var w=c.width,h=c.height,d=ctx.getImageData(0,0,w,h).data;
+    var x0=Math.floor(w*.12),x1=Math.floor(w*.88),y0=Math.floor(h*.08),y1=Math.floor(h*.92),i,x,y;
+    var border=[];
+    for(x=0;x<w;x+=6){[0,Math.min(h-1,10),h-1,Math.max(0,h-11)].forEach(function(yy){var k=(yy*w+x)*4;border.push((d[k]+d[k+1]+d[k+2])/3)})}
+    for(y=0;y<h;y+=6){[0,Math.min(w-1,10),w-1,Math.max(0,w-11)].forEach(function(xx){var k=(y*w+xx)*4;border.push((d[k]+d[k+1]+d[k+2])/3)})}
+    border.sort(function(a,b){return a-b});
+    var base=border[Math.floor(border.length/2)];
+    var sum=0,n=0;
+    for(y=y0;y<y1;y+=5)for(x=x0;x<x1;x+=5){i=(y*w+x)*4;sum+=(d[i]+d[i+1]+d[i+2])/3;n++}
+    var mean=sum/n,variance=0;
+    for(y=y0;y<y1;y+=6)for(x=x0;x<x1;x+=6){i=(y*w+x)*4;var lum=(d[i]+d[i+1]+d[i+2])/3;variance+=(lum-mean)*(lum-mean)}
+    var contrast=Math.sqrt(variance/Math.max(1,n)),tol=Math.max(22,Math.min(52,contrast*.65));
+    var minX=w,maxX=0,minY=h,maxY=0,count=0;
+    for(y=y0;y<y1;y+=2)for(x=x0;x<x1;x+=2){i=(y*w+x)*4;var l2=(d[i]+d[i+1]+d[i+2])/3;if(Math.abs(l2-base)>tol){minX=Math.min(minX,x);maxX=Math.max(maxX,x);minY=Math.min(minY,y);maxY=Math.max(maxY,y);count++}}
+    var fallback=count<Math.max(100,w*h*.004)||maxX<=minX||maxY<=minY;
+    if(fallback){minX=Math.floor(w*.18);maxX=Math.floor(w*.82);minY=Math.floor(h*.10);maxY=Math.floor(h*.90)}
+    var bw=maxX-minX,bh=maxY-minY,ratio=bw/Math.max(1,bh),area=(bw*bh)/(w*h),key;
+    if(ratio>=0.72&&ratio<=1.55&&area>=0.035)key='cup';
+    else if(ratio<0.62&&bh>bw*1.35)key='bottle';
+    else if(ratio>=1.55&&ratio<=2.8)key='flat';
+    else if(ratio>2.8)key='bag';
+    else key='container';
+    var size=area<.10?'Small':area<.30?'Medium':'Large';
+    return {shape:profiles[key].shape,size:size,ratio:+ratio.toFixed(2),occupancy:+(area*100).toFixed(1),key:key,fallback:fallback};
+  }
+  async function detectBarcode(canvas){
+    if(!('BarcodeDetector' in window))return null;
+    try{
+      var supported=await BarcodeDetector.getSupportedFormats();if(!supported.length)return null;
+      var det=new BarcodeDetector({formats:supported.filter(function(x){return ['ean_13','ean_8','upc_a','upc_e','qr_code','code_128'].indexOf(x)>-1})});
+      var codes=await det.detect(canvas);return codes&&codes[0]?codes[0].rawValue:null;
+    }catch(e){return null}
+  }
+  async function lookupOFF(code){
+    var url='https://world.openfoodfacts.org/api/v2/product/'+encodeURIComponent(code)+'.json?fields=code,product_name,brands,packaging,packaging_text,packagings,categories_tags,countries_tags';
+    try{var res=await fetch(url,{headers:{Accept:'application/json'}});if(!res.ok)return null;var data=await res.json();if(data.status!==1||!data.product)return null;return data.product}catch(e){return null}
+  }
+  function normalize(s){return String(s||'').toLowerCase().replace(/[_-]/g,' ')}
+  function packText(p){return normalize([p.packaging,p.packaging_text,JSON.stringify(p.packagings||[])].join(' '))}
+  function inferMaterialFromOFF(p){
+    var text=packText(p),hits=[],map={"01":["pet","pet plastic","polyethylene terephthalate"],"02":["hdpe","high density polyethylene"],"03":["pvc","polyvinyl chloride"],"04":["ldpe","low density polyethylene"],"05":["pp plastic","polypropylene"],"06":["polystyrene","ps plastic"],"07":["polycarbonate","abs","other plastic","mixed plastic"]};
+    Object.keys(map).forEach(function(code){if(map[code].some(function(t){return text.indexOf(t)>-1}))hits.push(code)});
+    return hits.length===1?hits[0]:null;
+  }
+  function inferShapeFromOFF(p){
+    var text=packText(p),map={bottle:['bottle','bouteille'],cup:['cup','tub','pot'],bag:['bag','pouch','film','sachet'],flat:['wrapper','film','wrap'],container:['container','tray','box','jar']},out=null;
+    Object.keys(map).some(function(k){if(map[k].some(function(w){return text.indexOf(w)>-1})){out=profiles[k].shape;return true}return false});
+    return out;
+  }
+  function recyclingFromOFF(p){
+    var text=normalize([p.packaging_text,JSON.stringify(p.packagings||[])].join(' '));
+    if(/do not recycle|not recyclable|non recyclable|discard/.test(text))return 'Not indicated as recyclable by product packaging data';
+    if(/recycl|recycle/.test(text))return 'Packaging data indicates a recycling instruction; follow local collection rules';
+    if(/reuse|reusable/.test(text))return 'Packaging data indicates reuse';
+    return 'No product-specific recycling instruction found';
+  }
+
+  async function runScan(c){
+    if(busy)return;
+    busy=true;var mine=++scanSeq;clearResult();$('scanBtn').disabled=true;
+    try{
+      var visual=analyzeCanvas(c);
+      $('cameraStatus').textContent='Image captured. Checking for a product barcode…';
+      var barcode=await detectBarcode(c);
+      if(mine!==scanSeq)return;
+      if(barcode){
+        $('cameraStatus').textContent='Barcode found. Looking up packaging data…';
+        var product=await lookupOFF(barcode);
+        if(mine!==scanSeq)return;
+        if(product){
+          var code=inferMaterialFromOFF(product),shape=inferShapeFromOFF(product),r=code?resinData[code]:null;
+          var name=product.product_name||product.brands||('Product '+barcode);
+          var recycle=recyclingFromOFF(product);
+          showResult({name:name,material:r?('#'+code+' — '+r.full):'NOT CONFIRMED',confidence:code?'High: product barcode + packaging evidence':'Medium: product barcode matched; material not confirmed',shape:shape||visual.shape,size:visual.size,points:code?'+'+r.score:'+5',action:recycle.indexOf('reusable')>-1?'REUSE / VERIFY':recycle.indexOf('recycling')>-1?'RECYCLE / VERIFY':'VERIFY',matchReason:'Barcode '+barcode+' matched an Open Food Facts product record. '+(code?'The packaging record contains material information.':'The record does not contain enough evidence to identify the polymer.'),source:'Open Food Facts product record'+(code?' + EPA/ASTM resin reference':''),text:(product.brands?product.brands+' · ':'')+name+'. Packaging/recycling information returned by the product record: '+recycle+'. Local campus collection rules still control final disposal.'});
+          $('cameraStatus').textContent='Scan complete. Verified product result shown';toast('Scan complete');return;
+        }
+      }
+      if(mine!==scanSeq)return;
+      var cands=profiles[visual.key].candidates.map(function(k){return resinData[k].name});
+      var isCup=visual.key==='cup';
+      var cat=isCup?'Plastic cup / cup-like packaging':visual.key==='bottle'?'Plastic bottle / bottle-like packaging':visual.key==='bag'?'Plastic film / bag-like packaging':visual.key==='flat'?'Plastic wrapper / flat packaging':'Plastic container / rigid packaging';
+      showResult({name:isCup?'Plastic cup detected':'Plastic item detected',material:isCup?('PLASTIC, cup category ('+cands.join(' / ')+' candidates)'):('PLASTIC, '+cat),confidence:isCup?'High: visual cup category; polymer not proven':'Moderate: visual packaging category; polymer not proven',shape:visual.shape,size:visual.size,points:isCup?'+10':'+5',action:'CHECK #1–#7 / VERIFY',matchReason:barcode?('Barcode '+barcode+' was detected, but no product record could be retrieved here. The image was classified visually as '+cat.toLowerCase()+'.'):('No readable barcode was detected. The image was classified visually as '+cat.toLowerCase()+'.'),source:'Visual classification + EPA/ASTM resin-identification guidance',text:'Captured image: '+visual.shape+', '+visual.size+', aspect ratio '+visual.ratio+':1, frame occupancy '+visual.occupancy+'%.'+(visual.fallback?' The item outline was unclear, so the centre of the frame was used.':'')+' Likely resin candidates: '+cands.join(' / ')+'. This is a visual category result, not a chemical polymer identification. For an exact polymer result, show the #1–#7 resin mark or use product/barcode evidence.'});
+      $('cameraStatus').textContent='Scan complete. Result generated from this capture';toast('Scan complete');
+    }catch(e){
+      console.error(e);clearResult();
+      $('cameraStatus').textContent='Scan failed. Try again with one item centered in the frame';toast('Scan failed. Try again.');
+    }finally{busy=false;$('scanBtn').disabled=false}
+  }
+  function scanNow(){
+    if(stream&&$('camera').videoWidth){runScan(grab($('camera'),$('camera').videoWidth,$('camera').videoHeight));return}
+    if(uploadedCanvas){runScan(uploadedCanvas);return}
+    toast('Start the camera or upload a photo first');
+    $('cameraStatus').textContent='Start the camera or upload a photo before scanning';
+  }
+  function captureOnly(){
+    var v=$('camera');
+    if(!stream||!v.videoWidth){toast('Start the camera first');$('cameraStatus').textContent='Start the camera before capturing';return}
+    uploadedCanvas=grab(v,v.videoWidth,v.videoHeight);
+    $('cameraStatus').textContent='Photo captured. Press Scan item to analyze this frame';toast('Photo captured');
+  }
+  function onPhoto(ev){
+    var f=ev.target.files&&ev.target.files[0];if(!f)return;
+    var url=URL.createObjectURL(f),img=new Image();
+    img.onload=function(){
+      if(stream)stopCamera();
+      var prev=$('photoPreview');prev.src=url;showPreview(true);
+      uploadedCanvas=grab(img,img.naturalWidth,img.naturalHeight);
+      $('cameraStatus').textContent='Photo loaded. Scanning…';
+      scanNow();
+    };
+    img.onerror=function(){toast('That file could not be read as an image')};
+    img.src=url;ev.target.value='';
+  }
+  function resetScan(){scanSeq++;clearResult();uploadedCanvas=null;showPreview(false);$('cameraStatus').textContent=stream?'Camera ready. Place ONE plastic item inside the frame':'Press Start camera, or upload a photo';toast('Scanner reset')}
+  function demoScan(){
+    showResult({name:'Demo: PET bottle',points:'+20',action:'REFILL / RECYCLE',material:'PET #1',confidence:'Demo only, not measured from camera',shape:profiles.bottle.shape,size:'Medium',matchReason:'Presentation demo profile',source:'Demo data, not evidence from a scanned item',text:'Presentation-only example. Use Scan item or Upload photo for real evidence.'});
+    toast('Demo result loaded');
+  }
+
+  $('cameraBtn').addEventListener('click',startCamera);
+  $('scanBtn').addEventListener('click',scanNow);
+  $('captureBtn').addEventListener('click',captureOnly);
+  $('uploadBtn').addEventListener('click',function(){$('photoInput').click()});
+  $('photoInput').addEventListener('change',onPhoto);
+  $('demoBtn').addEventListener('click',demoScan);
+  $('resetBtn').addEventListener('click',resetScan);
+  document.querySelectorAll('[data-resin]').forEach(function(b){b.addEventListener('click',function(){showResin(b.dataset.resin)})});
+  document.querySelectorAll('[data-go]').forEach(function(b){b.addEventListener('click',function(){var t=$(b.dataset.go);if(t)t.scrollIntoView({behavior:'smooth'})})});
+  window.addEventListener('beforeunload',function(){if(stream)stopCamera()});
+
+  /* ---------- pledge ---------- */
+  $('pledgeForm').addEventListener('submit',async function(event){
+    event.preventDefault();
+    var name=$('name').value.trim(),email=$('email').value.trim(),goal=$('goal').value.trim();
+    if(!name||!email||!goal){toast('Please complete all pledge fields');return}
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){$('email').focus();toast('Enter a valid email address');return}
+    var out=$('pledgeOut'),conf=$('confetti'),btn=$('pledgeBtn'),createdAt=new Date().toISOString();
+    btn.disabled=true;btn.textContent='Pledge accepted ✓';
+    $('pledgeDetails').textContent=name+' · '+goal;
+    out.classList.remove('show');void out.offsetWidth;out.classList.add('show');
+    conf.innerHTML='';
+    for(var i=0;i<32;i++){
+      var bit=document.createElement('i');
+      bit.style.left=(5+Math.random()*90)+'%';
+      bit.style.setProperty('--dx',((Math.random()-.5)*180)+'px');
+      bit.style.animationDelay=(Math.random()*.35)+'s';
+      conf.appendChild(bit);
+    }
+    try{localStorage.setItem('plastiqPledge',JSON.stringify({name:name,email:email,goal:goal,createdAt:createdAt,emailStatus:'pending'}))}catch(e){}
+    toast('7-day pledge created!');
+    try{
+      var response=await fetch('/api/pledge',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({name:name,email:email,goal:goal})});
+      var data=await response.json().catch(function(){return {}});
+      if(response.ok){
+        var st=data.emailStatus||'not_configured';
+        try{localStorage.setItem('plastiqPledge',JSON.stringify({name:name,email:email,goal:goal,createdAt:createdAt,emailStatus:st}))}catch(e){}
+        if(st==='scheduled')toast('Thank-you email sent and 7-day series scheduled!');
+        else if(st==='not_configured')toast('Pledge saved. Email sender setup is still pending');
+      }
+    }catch(err){}
+  });
+
+  /* ---------- Techi ---------- */
+  var INSTRUCTIONS='You are Techi, the assistant embedded in a webpage called "PLASTIQ: Human and Plastic Waste Awareness for Tech Students," which covers plastic and human waste, e-waste, campus and community waste management, IoT/AI-based smart bins, a plastic scanner, and the 5Rs (refuse, reduce, reuse, repair, recycle). If asked your name, say you are Techi. Help visitors understand this topic and adjacent ones (environmental science, sustainability, IoT, computer vision, data collection, campaign design), and answer reasonable general questions too; you are not limited only to waste topics. Be concise, practical, and specific. Use short paragraphs or a few bullet points, not long essays, unless asked for depth. If asked for the waste hierarchy, book recommendations, or project ideas, give concrete, usable answers.';
+  var log=$('chatLog'),input=$('chatInput'),sendBtn=$('chatSend'),shell=$('chatShell');
+  var turns=[],sampleFn=null,chatBusy=false;
+  function addMsg(role,text){
+    var el=document.createElement('div');el.className='msg '+(role==='user'?'user':'bot');el.textContent=text;
+    log.appendChild(el);log.scrollTop=log.scrollHeight;return el;
+  }
+  async function send(text){
+    if(!text.trim()||chatBusy||!sampleFn)return;
+    chatBusy=true;input.value='';sendBtn.disabled=true;
+    addMsg('user',text);turns.push({role:'user',content:text});
+    var el=addMsg('bot','Thinking…');el.classList.add('thinking');
+    try{
+      var payload=turns.map(function(t,i){return i===0?{role:t.role,content:INSTRUCTIONS+'\n\nVisitor message: '+t.content}:t});
+      var result=await sampleFn(payload,{cache:false,modelTier:'default',onText:function(o){el.classList.remove('thinking');el.textContent=o.text;log.scrollTop=log.scrollHeight}});
+      el.classList.remove('thinking');el.textContent=result.text;turns.push({role:'assistant',content:result.text});
+    }catch(e){
+      el.classList.remove('thinking');
+      if(e&&e.text){el.textContent=e.text}
+      else{
+        var copy={not_granted:"You'll need to allow this page to use the assistant to chat here.",rate_limited:'Too many requests right now. Try again in a moment.',refused:"That request couldn't be answered. Try rephrasing.",upstream_error:'Something went wrong reaching Techi. Try again.'};
+        el.textContent=(e&&copy[e.code])||"Couldn't get a response. Try again.";
+      }
+      turns.pop();
+    }finally{chatBusy=false;sendBtn.disabled=false;input.focus()}
+  }
+  sendBtn.addEventListener('click',function(){send(input.value)});
+  input.addEventListener('keydown',function(e){if(e.key==='Enter')send(input.value)});
+  $('chips').addEventListener('click',function(e){var b=e.target.closest('button[data-q]');if(b)send(b.dataset.q)});
+  (async function initChat(){
+    try{sampleFn=window.claude&&window.claude.use?await window.claude.use('sample'):null}catch(e){sampleFn=null}
+    if(!sampleFn){shell.innerHTML='<div class="unavail">Techi is not available in this view. Open the page at its published link to chat.</div>';return}
+    input.disabled=false;sendBtn.disabled=false;
+    addMsg('bot',"Hi, I'm Techi. Ask me anything about plastic waste, e-waste, campus sustainability, IoT sensors, or a related topic.");
+  })();
+
+  /* ---------- books ---------- */
+  var books=[
+    {title:"The Problem with Plastic",author:"Judith Enck",cat:"Plastic policy",blurb:"A 2025 case for systemic change in how plastic is produced and regulated, from a former EPA regional administrator."},
+    {title:"Thicker Than Water",author:"Erica Cirino",cat:"Plastic crisis",blurb:"A journalist traces the plastic crisis from source to sea, reporting from research stations and cleanup sites."},
+    {title:"How to Give Up Plastic",author:"Will McCallum",cat:"Practical guide",blurb:"A room-by-room, habit-by-habit guide to cutting single-use plastic out of daily life."},
+    {title:"Zero Waste Home",author:"Bea Johnson",cat:"Practical guide",blurb:"An early, influential account of reducing household waste to almost nothing, with concrete swaps."},
+    {title:"Can I Recycle This?",author:"Jennie Romer",cat:"Recycling",blurb:"A practical breakdown of what actually gets recycled versus what just looks recyclable, and why."},
+    {title:"Year of No Garbage",author:"Eve O. Schaub",cat:"Memoir",blurb:"A year-long personal experiment confronting household trash, recycling myths, and where waste really goes."},
+    {title:"Junkyard Planet",author:"Adam Minter",cat:"E-waste & recycling",blurb:"A look inside the global scrap and recycling trade, including electronics. Useful context for the e-waste sections of this brief."},
+    {title:"Cradle to Cradle",author:"William McDonough & Michael Braungart",cat:"Design",blurb:"A foundational sustainable-design argument for products built to be fully reused or safely returned to nature. Relevant for anyone designing tech hardware."},
+    {title:"Garbology",author:"Edward Humes",cat:"Waste systems",blurb:"An accessible tour of where American trash actually goes, and what that reveals about consumption."},
+    {title:"Plastic Ocean",author:"Charles Moore",cat:"Ocean pollution",blurb:"The oceanographer who identified the Great Pacific Garbage Patch recounts the discovery and its implications."}
+  ];
+  var grid=$('bookGrid'),countEl=$('bookCount');
+  function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+  function renderBooks(list){
+    if(!list.length){grid.innerHTML='<div class="note-s">No books match that search. Try a different title, author, or topic.</div>';countEl.textContent='0 results';return}
+    countEl.textContent=list.length+(list.length===books.length?' books':' matching');
+    grid.innerHTML=list.map(function(b){return '<div class="book"><div class="book-title">'+esc(b.title)+'</div><div class="book-author">'+esc(b.author)+'</div><div class="book-blurb">'+esc(b.blurb)+'</div><span class="book-cat">'+esc(b.cat)+'</span></div>'}).join('');
+  }
+  $('bookSearch').addEventListener('input',function(){
+    var q=this.value.trim().toLowerCase();
+    if(!q){renderBooks(books);return}
+    renderBooks(books.filter(function(b){return (b.title+' '+b.author+' '+b.cat+' '+b.blurb).toLowerCase().indexOf(q)>-1}));
+  });
+  renderBooks(books);
+
+  /* ---------- motion layer ---------- */
+  var nav=$('topnav'),prog=$('scrollProgress');
+  function scrollUI(){
+    var y=window.scrollY||0,max=Math.max(1,document.documentElement.scrollHeight-innerHeight);
+    prog.style.width=(y/max*100)+'%';nav.classList.toggle('scrolled',y>12);
+  }
+  scrollUI();window.addEventListener('scroll',scrollUI,{passive:true});
+  var links=[].slice.call(document.querySelectorAll('.navlinks a'));
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'-35% 0px -55% 0px'});
+    document.querySelectorAll('section[id]').forEach(function(s){io.observe(s)});
+    var co=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){count($('bottles'),1284,false);count($('kg'),412,true);co.disconnect()}})},{threshold:.4});
+    co.observe($('campus'));
+  }
+  function count(el,end,kg){
+    var t0=null,dur=1100;
+    function step(t){if(!t0)t0=t;var p=Math.min(1,(t-t0)/dur),q=1-Math.pow(1-p,3),v=Math.round(end*q);el.textContent=kg?v+' kg':v.toLocaleString();if(p<1)requestAnimationFrame(step)}
+    requestAnimationFrame(step);
+  }
+  document.querySelectorAll('.btn').forEach(function(btn){btn.addEventListener('click',function(e){
+    var r=document.createElement('span'),rect=this.getBoundingClientRect(),size=Math.max(rect.width,rect.height);
+    r.className='ripple';r.style.width=r.style.height=size+'px';r.style.left=(e.clientX-rect.left-size/2)+'px';r.style.top=(e.clientY-rect.top-size/2)+'px';
+    this.appendChild(r);setTimeout(function(){r.remove()},700);
+  })});
+})();
+</script>
+
+<script>
+(function(){
+
+/* ---------- script sources (pinned) ---------- */
+const SRC = {
+  d3:   ["https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js","https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"],
+  topo: ["https://cdn.jsdelivr.net/npm/datamaps@0.5.9/dist/datamaps.world.min.js","https://cdnjs.cloudflare.com/ajax/libs/datamaps/0.5.9/datamaps.world.min.js"]
+};
+
+/* ---------- data ---------- */
+const SECTORS = [
+  {n:"Households",short:"Households"},
+  {n:"Shops, offices & services",short:"Services"},
+  {n:"Industry & manufacturing",short:"Industry"},
+  {n:"Construction & demolition",short:"Construction"},
+  {n:"Agriculture & food processing",short:"Agriculture"},
+  {n:"Hazardous & e-waste",short:"Hazardous & e-waste"}
+];
+/* share of total waste by sector, per economy type (percent) */
+const PROFILE = {
+  HI:  [20,14,22,30,10,4],
+  MFG: [24,12,28,24,9,3],
+  UM:  [30,14,18,18,17,3],
+  LM:  [38,10,14,14,22,2],
+  LI:  [52,8,5,6,28,1],
+  RES: [14,10,38,22,12,4],
+  GULF:[22,14,28,28,5,3]
+};
+/* ISO3, name, population (millions), household+commercial waste (Mt/yr), economy type */
+const RAW = `
+USA,United States,333,265,HI
+CHN,China,1412,240,MFG
+IND,India,1417,168,LM
+BRA,Brazil,215,79,UM
+IDN,Indonesia,275,64,LM
+JPN,Japan,125,43,HI
+DEU,Germany,83,51,HI
+RUS,Russia,144,60,RES
+MEX,Mexico,128,53,MFG
+GBR,United Kingdom,67,31,HI
+FRA,France,68,34,HI
+ITA,Italy,59,29,HI
+TUR,Turkey,85,32,MFG
+NGA,Nigeria,218,32,LM
+PAK,Pakistan,231,30,LM
+THA,Thailand,70,27,MFG
+VNM,Vietnam,98,22,LM
+BGD,Bangladesh,171,22,LM
+EGY,Egypt,109,21,LM
+ZAF,South Africa,60,21,UM
+KOR,South Korea,52,19,HI
+IRN,Iran,88,20,UM
+CAN,Canada,39,31,RES
+ESP,Spain,47,29,HI
+ARG,Argentina,46,18,UM
+SAU,Saudi Arabia,36,15,GULF
+MYS,Malaysia,33,14.5,MFG
+POL,Poland,38,13,HI
+PHL,Philippines,115,14.6,LM
+COL,Colombia,52,12,UM
+AUS,Australia,26,14,RES
+UKR,Ukraine,41,14,UM
+KAZ,Kazakhstan,19,4.5,RES
+IRQ,Iraq,44,14,UM
+DZA,Algeria,45,13,LM
+MAR,Morocco,37,7,LM
+PER,Peru,34,8,UM
+VEN,Venezuela,28,9,UM
+CHL,Chile,19.5,8,RES
+ETH,Ethiopia,123,8,LI
+COD,DR Congo,99,7,LI
+KEN,Kenya,54,5.5,LM
+TZA,Tanzania,65,8,LI
+UGA,Uganda,47,6,LI
+GHA,Ghana,33,4.5,LM
+SDN,Sudan,46,5,LI
+MMR,Myanmar,54,6,LM
+NPL,Nepal,30,2.5,LM
+LKA,Sri Lanka,22,3.5,LM
+AFG,Afghanistan,41,5,LI
+UZB,Uzbekistan,35,5,LM
+SYR,Syria,22,4,LI
+YEM,Yemen,33,4,LI
+AGO,Angola,35,5,LM
+MOZ,Mozambique,33,3.5,LI
+MDG,Madagascar,29,3,LI
+CMR,Cameroon,27,4,LM
+CIV,Côte d'Ivoire,28,4,LM
+SEN,Senegal,17,2.5,LM
+ZMB,Zambia,20,2.5,LI
+ZWE,Zimbabwe,16,2,LI
+MWI,Malawi,20,1.5,LI
+MLI,Mali,22,2.5,LI
+NER,Niger,26,2,LI
+BFA,Burkina Faso,22,2.5,LI
+TCD,Chad,17,1.5,LI
+SOM,Somalia,17,1.5,LI
+RWA,Rwanda,13,1.3,LI
+SSD,South Sudan,11,1,LI
+GIN,Guinea,14,2,LI
+MRT,Mauritania,4.6,1,LM
+NAM,Namibia,2.6,0.7,UM
+BWA,Botswana,2.4,0.7,UM
+LBY,Libya,7,2.5,UM
+TUN,Tunisia,12,2.8,LM
+JOR,Jordan,11,2.5,LM
+LBN,Lebanon,5.5,2,UM
+ISR,Israel,9.5,5.6,HI
+ARE,United Arab Emirates,9.4,5.5,GULF
+KWT,Kuwait,4.3,2.5,GULF
+QAT,Qatar,2.7,2.5,GULF
+OMN,Oman,5.2,2,GULF
+NLD,Netherlands,17.6,9,HI
+BEL,Belgium,11.6,5,HI
+SWE,Sweden,10.5,4.5,HI
+NOR,Norway,5.4,2.5,HI
+DNK,Denmark,5.9,4.1,HI
+FIN,Finland,5.5,2.8,HI
+AUT,Austria,9,5.2,HI
+CHE,Switzerland,8.7,6,HI
+PRT,Portugal,10.3,5.3,HI
+GRC,Greece,10.4,5.5,HI
+IRL,Ireland,5.1,3,HI
+CZE,Czechia,10.5,5.9,HI
+HUN,Hungary,9.7,3.8,HI
+ROU,Romania,19,5.3,UM
+BGR,Bulgaria,6.9,3,UM
+SRB,Serbia,6.9,2.5,UM
+HRV,Croatia,3.9,1.8,HI
+SVK,Slovakia,5.4,2.4,HI
+SVN,Slovenia,2.1,1,HI
+BLR,Belarus,9.3,3.4,UM
+LTU,Lithuania,2.8,1.4,HI
+LVA,Latvia,1.9,0.9,HI
+EST,Estonia,1.3,0.6,HI
+ISL,Iceland,0.37,0.2,HI
+NZL,New Zealand,5.1,3.7,HI
+SGP,Singapore,5.5,3,HI
+TWN,Taiwan,23.4,8,HI
+KHM,Cambodia,17,2.5,LM
+LAO,Laos,7.4,1.4,LM
+MNG,Mongolia,3.4,1,LM
+PRK,North Korea,26,4,LM
+CUB,Cuba,11,3,UM
+DOM,Dominican Republic,11,4,UM
+GTM,Guatemala,18,3,LM
+HND,Honduras,10,1.5,LM
+CRI,Costa Rica,5.2,1.5,UM
+PAN,Panama,4.4,1.5,UM
+ECU,Ecuador,18,5,UM
+BOL,Bolivia,12,2.5,LM
+PRY,Paraguay,7,2,UM
+URY,Uruguay,3.4,1.4,UM
+HTI,Haiti,11.6,2,LI
+AZE,Azerbaijan,10,3.5,UM
+GEO,Georgia,3.7,1,UM
+ARM,Armenia,2.8,0.8,UM
+TKM,Turkmenistan,6,2,UM
+KGZ,Kyrgyzstan,6.7,1.2,LM
+TJK,Tajikistan,10,1.5,LI
+BIH,Bosnia and Herzegovina,3.2,1.2,UM
+MKD,North Macedonia,2.1,0.8,UM
+ALB,Albania,2.8,1,UM
+PNG,Papua New Guinea,10,1,LM
+`.trim().split("\n");
+
+const DATA = new Map();
+RAW.forEach(line=>{
+  const [iso,name,pop,msw,arch] = line.split(",");
+  const p = PROFILE[arch];
+  const total = (+msw) / ((p[0]+p[1])/100);        // Mt/yr
+  const sec = p.map(s=>total*s/100);
+  DATA.set(iso,{iso,name,pop:+pop,total,sec,v:[total,...sec],pc:total*1000/(+pop)});
+});
+const LIST = [...DATA.values()];
+const WORLD_TOTAL = LIST.reduce((a,d)=>a+d.total,0);
+
+/* rank tables: metric 0 = total, 1..6 = sectors */
+const RANK = [];
+for(let m=0;m<7;m++){
+  const sorted = [...LIST].sort((a,b)=>b.v[m]-a.v[m]);
+  const map = new Map(); sorted.forEach((d,i)=>map.set(d.iso,i+1));
+  RANK.push({sorted,map});
+}
+
+/* ---------- helpers ---------- */
+const $ = id => document.getElementById(id);
+function fmtMt(v){ if(v>=100) return Math.round(v).toLocaleString("en-US"); if(v>=10) return v.toFixed(1); if(v>=1) return v.toFixed(1); return v.toFixed(2); }
+function fmtKg(v){ return Math.round(v/10)*10 >= 1000 ? (Math.round(v/10)*10).toLocaleString("en-US") : String(Math.round(v)); }
+const METRIC_LABELS = ["Total",...SECTORS.map(s=>s.short)];
+let metric = 0, selected = null, hovered = null;
+
+/* ---------- loader ---------- */
+function loadOne(src){return new Promise((res,rej)=>{const s=document.createElement("script");s.src=src;s.onload=res;s.onerror=()=>rej(new Error(src));document.head.appendChild(s);});}
+function loadAny(list){return list.reduce((p,s)=>p.catch(()=>loadOne(s)),Promise.reject());}
+
+loadAny(SRC.d3).then(()=>loadAny(SRC.topo)).then(start).catch(err=>{
+  $("gLoading").hidden=false;
+  $("gLoading").innerHTML = "<div><b>The map could not load.</b><br>Check your connection and reload the page. The ranking below still works.</div>";
+  buildUI(); renderResult();
+});
+
+/* ---------- topology decode (TopoJSON, no extra library) ---------- */
+function decodeTopo(t){
+  const tr = t.transform;
+  const arcs = t.arcs.map(a=>{
+    if(!tr) return a.map(p=>[p[0],p[1]]);
+    let x=0,y=0; return a.map(p=>{x+=p[0];y+=p[1];return [x*tr.scale[0]+tr.translate[0], y*tr.scale[1]+tr.translate[1]];});
+  });
+  const arc = i => i<0 ? arcs[~i].slice().reverse() : arcs[i];
+  const ring = idx => { let pts=[]; idx.forEach((i,k)=>{const a=arc(i); pts = pts.concat(k?a.slice(1):a);}); return pts; };
+  const obj = Object.values(t.objects)[0];
+  const feats = [];
+  obj.geometries.forEach(g=>{
+    if(!g || !g.arcs) return;
+    let polys;
+    if(g.type==="Polygon") polys=[g.arcs.map(ring)];
+    else if(g.type==="MultiPolygon") polys=g.arcs.map(p=>p.map(ring));
+    else return;
+    feats.push({id:g.id, name:(g.properties&&g.properties.name)||g.id, polys});
+  });
+  return feats;
+}
+
+/* ---------- globe ---------- */
+let FEATS=[], proj, path, ctx, canvas, W=0,H=0,cx=0,cy=0,R0=100,dpr=1;
+let rot=[-70,-18], zoom=1, TH={}, dirty=true;
+let tween=null, vel=[0,0], lastInteract=0, hasInteracted=false;
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function readTheme(){
+  const cs=getComputedStyle(document.documentElement), g=n=>cs.getPropertyValue(n).trim();
+  TH={ocean:g("--ocean"),nodata:g("--nodata"),stroke:g("--land-stroke"),grat:g("--grat"),halo:g("--halo"),shade:g("--shade"),
+      sel:g("--sel"),selFill:g("--sel-fill"),hoverFill:g("--hover-fill"),ramp:[g("--r0"),g("--r1"),g("--r2"),g("--r3"),g("--r4")]};
+  dirty=true; buildLegend();
+}
+function thresholds(){
+  const vals=RANK[metric].sorted.map(d=>d.v[metric]).reverse(); // ascending
+  const q=p=>vals[Math.min(vals.length-1,Math.floor(p*vals.length))];
+  return [q(.35),q(.6),q(.8),q(.93)];
+}
+function classOf(v,th){let i=0;while(i<th.length&&v>=th[i])i++;return i;}
+function colorFor(id,th){const d=DATA.get(id);return d?TH.ramp[classOf(d.v[metric],th)]:TH.nodata;}
+
+function buildLegend(){
+  const th=thresholds(), el=$("gLegend"); if(!TH.ramp) return;
+  const r=(a,b)=>b==null?`${fmtMt(a)}+ Mt`:a==null?`under ${fmtMt(b)} Mt`:`${fmtMt(a)}\u2013${fmtMt(b)} Mt`;
+  const labels=[r(null,th[0]),r(th[0],th[1]),r(th[1],th[2]),r(th[2],th[3]),r(th[3],null)];
+  el.innerHTML = labels.map((l,i)=>`<span class="lg"><span class="sw" style="background:${TH.ramp[i]}"></span>${l}</span>`).join("")+
+    `<span class="lg"><span class="sw" style="background:${TH.nodata}"></span>No figures</span>`;
+}
+
+function start(){
+  const topo = (window.Datamap&&Datamap.prototype.worldTopo)||(window.Datamaps&&Datamaps.prototype.worldTopo);
+  if(!topo) throw new Error("no topology");
+  FEATS = decodeTopo(topo).map(f=>{
+    // fix ring winding so d3 fills the country, not the rest of the sphere
+    const polys=f.polys.map(rings=>{
+      const a=d3.geoArea({type:"Polygon",coordinates:rings});
+      return a>2*Math.PI ? rings.map(r=>r.slice().reverse()) : rings;
+    });
+    // planar copy for hit-testing and bounding boxes
+    const boxes=f.polys.map(rings=>{let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;rings[0].forEach(p=>{if(p[0]<x0)x0=p[0];if(p[0]>x1)x1=p[0];if(p[1]<y0)y0=p[1];if(p[1]>y1)y1=p[1];});return [x0,y0,x1,y1];});
+    // largest polygon (by spherical area) centres the camera
+    let best=0,bi=0;polys.forEach((r,i)=>{const a=d3.geoArea({type:"Polygon",coordinates:r});if(a>best){best=a;bi=i;}});
+    const centre=d3.geoCentroid({type:"Polygon",coordinates:polys[bi]});
+    return {id:f.id,name:f.name,geom:{type:"MultiPolygon",coordinates:polys},planar:f.polys,boxes,centre,area:best};
+  });
+  FEATS.forEach(f=>{ if(!DATA.has(f.id)) return; });
+  canvas=$("gCanvas"); ctx=canvas.getContext("2d");
+  proj=d3.geoOrthographic().clipAngle(90).precision(.4);
+  path=d3.geoPath(proj,ctx);
+  readTheme();
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change",readTheme);
+  new ResizeObserver(resize).observe($("gStage")); resize();
+  bindInput(); buildUI(); renderResult();
+  $("gLoading").hidden=true;
+  requestAnimationFrame(tick);
+}
+
+function resize(){
+  const st=$("gStage"); W=st.clientWidth; H=st.clientHeight; dpr=Math.min(window.devicePixelRatio||1,2);
+  canvas.width=Math.round(W*dpr); canvas.height=Math.round(H*dpr);
+  cx=W/2; cy=H/2; R0=Math.min(W,H)/2*0.9; dirty=true;
+}
+
+const GRAT=()=>d3.geoGraticule10();
+let gratGeo=null;
+function draw(){
+  if(!ctx||!W) return;
+  const R=R0*zoom; if(!gratGeo) gratGeo=GRAT();
+  proj.translate([cx,cy]).scale(R).rotate(rot);
+  ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+  // halo
+  let g=ctx.createRadialGradient(cx,cy,R*.97,cx,cy,R*1.13);
+  g.addColorStop(0,TH.halo); g.addColorStop(1,"rgba(0,0,0,0)");
+  ctx.fillStyle=g; ctx.beginPath(); ctx.arc(cx,cy,R*1.13,0,7); ctx.fill();
+  // ocean
+  ctx.beginPath(); path({type:"Sphere"}); ctx.fillStyle=TH.ocean; ctx.fill();
+  ctx.beginPath(); path(gratGeo); ctx.strokeStyle=TH.grat; ctx.lineWidth=.6; ctx.stroke();
+  // countries
+  const th=thresholds();
+  ctx.lineWidth=.6; ctx.strokeStyle=TH.stroke; ctx.lineJoin="round";
+  for(const f of FEATS){ ctx.beginPath(); path(f.geom); ctx.fillStyle=colorFor(f.id,th); ctx.fill(); ctx.stroke(); }
+  // hover and selection
+  const hf=hovered&&FEATS.find(f=>f.id===hovered);
+  if(hf&&hovered!==selected){ctx.beginPath();path(hf.geom);ctx.fillStyle=TH.hoverFill;ctx.fill();}
+  const sf=selected&&FEATS.find(f=>f.id===selected);
+  if(sf){ctx.beginPath();path(sf.geom);ctx.fillStyle=TH.selFill;ctx.fill();ctx.strokeStyle=TH.sel;ctx.lineWidth=2;ctx.stroke();}
+  // lighting
+  g=ctx.createRadialGradient(cx-R*.35,cy-R*.4,R*.2,cx,cy,R*1.02);
+  g.addColorStop(0,"rgba(0,0,0,0)"); g.addColorStop(.7,"rgba(0,0,0,0)"); g.addColorStop(1,TH.shade);
+  ctx.beginPath(); ctx.arc(cx,cy,R,0,7); ctx.fillStyle=g; ctx.fill();
+  dirty=false;
+}
+
+function tick(t){
+  const now=performance.now();
+  if(tween){
+    const k=Math.min(1,(now-tween.t0)/tween.dur), e=1-Math.pow(1-k,3);
+    rot=[tween.a[0]+(tween.b[0]-tween.a[0])*e, tween.a[1]+(tween.b[1]-tween.a[1])*e];
+    zoom=tween.z0+(tween.z1-tween.z0)*e; dirty=true;
+    if(k>=1) tween=null;
+  } else if(Math.abs(vel[0])>.01||Math.abs(vel[1])>.01){
+    rot[0]+=vel[0]; rot[1]=Math.max(-90,Math.min(90,rot[1]+vel[1])); vel[0]*=.94; vel[1]*=.94; dirty=true;
+  } else if(!reduced && !selected && !dragging && now-lastInteract>3500 && !document.hidden){
+    rot[0]-=.12; dirty=true;
+  }
+  if(dirty) draw();
+  requestAnimationFrame(tick);
+}
+
+/* ---------- picking ---------- */
+function pip(pt,ring){let c=false;for(let i=0,j=ring.length-1;i<ring.length;j=i++){const a=ring[i],b=ring[j];if((a[1]>pt[1])!==(b[1]>pt[1])&&pt[0]<(b[0]-a[0])*(pt[1]-a[1])/(b[1]-a[1])+a[0])c=!c;}return c;}
+function pick(px,py,snap){
+  const R=R0*zoom, dx=px-cx, dy=py-cy;
+  if(dx*dx+dy*dy>R*R) return null;
+  const ll=proj.invert([px,py]); if(!ll||isNaN(ll[0])||isNaN(ll[1])) return null;
+  for(const f of FEATS){
+    for(let i=0;i<f.planar.length;i++){
+      const b=f.boxes[i]; if(ll[0]<b[0]||ll[0]>b[2]||ll[1]<b[1]||ll[1]>b[3]) continue;
+      const rings=f.planar[i]; let inside=false;
+      for(const r of rings) if(pip(ll,r)) inside=!inside;
+      if(inside) return f.id;
+    }
+  }
+  if(snap){ // small countries and coastlines: nearest outline within about 150 km
+    let best=null,bd=0.024;
+    for(const f of FEATS){ if(!DATA.has(f.id)) continue;
+      for(const rings of f.planar) for(const p of rings[0]){ const d=d3.geoDistance(ll,p); if(d<bd){bd=d;best=f.id;} } }
+    return best;
+  }
+  return null;
+}
+
+/* ---------- input ---------- */
+let dragging=false;
+function bindInput(){
+  const ptrs=new Map(); let start=null, moved=false, pinch0=0, zoom0=1, lastMove=null;
+  canvas.addEventListener("pointerdown",e=>{
+    canvas.setPointerCapture(e.pointerId); ptrs.set(e.pointerId,{x:e.offsetX,y:e.offsetY});
+    tween=null; vel=[0,0]; touch();
+    if(ptrs.size===1){start={x:e.offsetX,y:e.offsetY}; moved=false; dragging=true; lastMove={x:e.offsetX,y:e.offsetY,t:performance.now()};}
+    if(ptrs.size===2){const [a,b]=[...ptrs.values()]; pinch0=Math.hypot(a.x-b.x,a.y-b.y); zoom0=zoom; moved=true;}
+    canvas.classList.add("grabbing"); hideTip();
+  });
+  canvas.addEventListener("pointermove",e=>{
+    const x=e.offsetX,y=e.offsetY;
+    if(!ptrs.has(e.pointerId)){ // hover
+      if(e.pointerType==="mouse"){const id=pick(x,y,false); if(id!==hovered){hovered=id;dirty=true;} canvas.classList.toggle("over",!!id&&DATA.has(id)); showTip(id,x,y);}
+      return;
+    }
+    ptrs.set(e.pointerId,{x,y});
+    if(ptrs.size===2){const [a,b]=[...ptrs.values()]; zoom=clampZoom(zoom0*Math.hypot(a.x-b.x,a.y-b.y)/pinch0); dirty=true; return;}
+    if(!start) return;
+    if(!moved && Math.hypot(x-start.x,y-start.y)>6) moved=true;
+    if(moved){
+      const dx=x-lastMove.x, dy=y-lastMove.y, k=57.3/(R0*zoom);
+      rot[0]+=dx*k; rot[1]=Math.max(-90,Math.min(90,rot[1]-dy*k));
+      const dt=Math.max(1,performance.now()-lastMove.t); vel=[dx*k*16/dt,-dy*k*16/dt];
+      lastMove={x,y,t:performance.now()}; dirty=true;
+    }
+  });
+  const up=e=>{
+    const had=ptrs.delete(e.pointerId);
+    if(!had) return;
+    if(ptrs.size===0){
+      dragging=false; canvas.classList.remove("grabbing");
+      if(!moved&&start){ const id=pick(start.x,start.y,true); if(id) choose(id,true); else if(selected){choose(null);} }
+      else if(performance.now()-lastMove.t>80) vel=[0,0];
+      start=null; touch();
+    }
+  };
+  canvas.addEventListener("pointerup",up); canvas.addEventListener("pointercancel",up);
+  canvas.addEventListener("pointerleave",()=>{hovered=null;hideTip();dirty=true;});
+  canvas.addEventListener("wheel",e=>{ if(!(e.ctrlKey||e.metaKey)) return; e.preventDefault(); zoom=clampZoom(zoom*Math.exp(-e.deltaY*.01)); dirty=true; touch(); },{passive:false});
+  $("gZin").onclick=()=>{zoom=clampZoom(zoom*1.3);dirty=true;touch();};
+  $("gZout").onclick=()=>{zoom=clampZoom(zoom/1.3);dirty=true;touch();};
+  canvas.addEventListener("keydown",e=>{
+    const s=6; let h=true;
+    if(e.key==="ArrowLeft") rot[0]+=s; else if(e.key==="ArrowRight") rot[0]-=s;
+    else if(e.key==="ArrowUp") rot[1]=Math.min(90,rot[1]+s); else if(e.key==="ArrowDown") rot[1]=Math.max(-90,rot[1]-s);
+    else if(e.key==="+"||e.key==="=") zoom=clampZoom(zoom*1.2); else if(e.key==="-") zoom=clampZoom(zoom/1.2);
+    else h=false;
+    if(h){e.preventDefault();dirty=true;touch();}
+  });
+}
+const clampZoom=z=>Math.max(.8,Math.min(5,z));
+function touch(){lastInteract=performance.now(); if(!hasInteracted){hasInteracted=true; $("gHint").classList.add("gone");}}
+
+const tip=$("gTip");
+function showTip(id,x,y){
+  const d=id&&DATA.get(id), f=id&&FEATS.find(f=>f.id===id);
+  if(!f){hideTip();return;}
+  tip.innerHTML=`<b>${f.name}</b>`+(d?`<i>${fmtMt(d.total)} Mt</i>`:`<i>no figures</i>`);
+  tip.style.left=x+"px"; tip.style.top=y+"px"; tip.classList.add("on");
+}
+function hideTip(){tip.classList.remove("on");}
+
+/* ---------- selection ---------- */
+function choose(id,fromGlobe){
+  selected=id; dirty=true; renderResult(); markList();
+  if(id){
+    const f=FEATS.find(f=>f.id===id);
+    if(f&&proj){
+      const a=rot.slice(), b=[-f.centre[0],-f.centre[1]];
+      let d=b[0]-a[0]; d=((d+540)%360)-180; b[0]=a[0]+d;
+      const z1=Math.max(zoom,1.15);
+      tween={a,b,z0:zoom,z1,t0:performance.now(),dur:reduced?1:900}; vel=[0,0];
+    }
+  }
+}
+
+/* ---------- UI ---------- */
+function buildUI(){
+  if($("gMetrics").children.length) return;
+  $("gMetrics").innerHTML=METRIC_LABELS.map((l,i)=>`<button type="button" data-m="${i}" aria-pressed="${i===metric}">${l}</button>`).join("");
+  $("gMetrics").addEventListener("click",e=>{
+    const b=e.target.closest("button"); if(!b) return;
+    metric=+b.dataset.m; [...$("gMetrics").children].forEach((c,i)=>c.setAttribute("aria-pressed",i===metric));
+    dirty=true; if(TH.ramp) buildLegend(); buildList(); renderResult();
+  });
+  buildList();
+}
+function buildList(){
+  const rk=RANK[metric], max=rk.sorted[0].v[metric];
+  $("gRtitle").textContent = metric===0 ? "Ranking by total waste" : `Ranking by ${METRIC_LABELS[metric].toLowerCase()} waste`;
+  $("gRcount").textContent = `${rk.sorted.length} countries, million tonnes a year`;
+  $("gRlist").innerHTML = rk.sorted.map((d,i)=>`<button class="row" role="listitem" data-id="${d.iso}" aria-current="${d.iso===selected}">
+      <span class="n">${i+1}</span><span class="cn">${d.name}</span>
+      <span class="bb"><i style="width:${Math.max(1.5,d.v[metric]/max*100)}%"></i></span>
+      <span class="t">${fmtMt(d.v[metric])} Mt</span></button>`).join("");
+  markList(true);
+}
+$("gRlist").addEventListener("click",e=>{const b=e.target.closest(".row"); if(b) choose(b.dataset.id,false);});
+function markList(noScroll){
+  let cur=null;
+  $("gRlist").querySelectorAll(".row").forEach(r=>{const on=r.dataset.id===selected; r.setAttribute("aria-current",on); if(on)cur=r;});
+  if(cur&&!noScroll){const l=$("gRlist"); l.scrollTo({top:Math.max(0,cur.offsetTop-l.clientHeight/2+cur.clientHeight/2),behavior:reduced?"auto":"smooth"});}
+}
+
+function renderResult(){
+  const el=$("gResult"), d=selected&&DATA.get(selected);
+  if(!selected){
+    const top=RANK[0].sorted[0];
+    el.innerHTML=`<div><div class="empty"><h3>Touch a country</h3><p>Its rank and waste by sector will appear here. Across ${LIST.length} countries we estimate about <b>${Math.round(WORLD_TOTAL).toLocaleString("en-US")} Mt</b> of solid waste a year, and ${top.name} is the largest producer.</p></div></div><div></div>`;
+    return;
+  }
+  if(!d){
+    const f=FEATS.find(f=>f.id===selected);
+    el.innerHTML=`<div><div class="empty"><h3>${f?f.name:selected}</h3><p>There are no waste figures for this country in the dataset yet. Try a nearby country or pick one from the ranking below.</p></div></div><div></div>`;
+    return;
+  }
+  const rank=RANK[0].map.get(d.iso), n=LIST.length, share=d.total/WORLD_TOTAL*100;
+  const maxI=d.sec.indexOf(Math.max(...d.sec));
+  const rows=SECTORS.map((s,i)=>{
+    const pct=d.sec[i]/d.total*100;
+    return `<div class="srow ${metric===i+1?"act":""}"><span class="nm"><span class="dot" style="background:var(--s${i})"></span>${s.n}</span>
+      <span class="val">${fmtMt(d.sec[i])} Mt <em>&middot; ${pct.toFixed(0)}% &middot; #${RANK[i+1].map.get(d.iso)}</em></span>
+      <span class="bar"><i style="width:${pct}%;background:var(--s${i})"></i></span></div>`;
+  }).join("");
+  el.innerHTML=`<div>
+      <h2 class="cname">${d.name}</h2>
+      <p class="csub">${d.pop>=10?Math.round(d.pop):d.pop} million people</p>
+      <div class="rankbox"><span class="rankn">#${rank}</span><span class="rankof">of ${n} countries by total waste</span></div>
+      <div class="ranktrack" aria-hidden="true"><i style="left:${(1-(rank-1)/(n-1||1))*100}%"></i></div>
+      <div class="kv">
+        <div><div class="v">${fmtMt(d.total)}<small>Mt/yr</small></div><div class="l">Total waste</div></div>
+        <div><div class="v">${fmtKg(d.pc)}<small>kg</small></div><div class="l">Per person a year</div></div>
+        <div><div class="v">${share<1?share.toFixed(2):share.toFixed(1)}<small>%</small></div><div class="l">Of all countries listed</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="sechead"><h2>Waste by sector</h2><span>amount, share, rank</span></div>
+      <p class="lead"><b>${SECTORS[maxI].n}</b> is the largest source here, at ${fmtMt(d.sec[maxI])} Mt or ${(d.sec[maxI]/d.total*100).toFixed(0)}% of the total.</p>
+      <div class="srows">${rows}</div>
+    </div>`;
+}
+renderResult(); // initial prompt before the map loads
+
+})();
+</script>
+
+</body></html>
